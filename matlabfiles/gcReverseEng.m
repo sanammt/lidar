@@ -1,4 +1,11 @@
-
+%%%%%%%% Start of Copyright Notice %%%%%%%
+%
+% copyright © 2018
+% Written by Sanam Moslemi-Tabrizi
+% All rights reserved
+% Can NOT be copied or distrutated without including this copyright notice
+%
+%%%%%%%% End of Copyright Notice %%%%%%%%%%%
 %%  Take from nature's paper: High-efficiency grating-couplers: demonstration of a new design strategy
 %% Equations and Data from the paper
 % * neff = F*nO + (1-f)*nE

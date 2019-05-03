@@ -1,3 +1,11 @@
+%%%%%%%% Start of Copyright Notice %%%%%%%
+%
+% copyright © 2018
+% Written by Sanam Moslemi-Tabrizi
+% All rights reserved
+% Can NOT be copied or distrutated without including this copyright notice
+%
+%%%%%%%% End of Copyright Notice %%%%%%%%%%%
 clear all
 close all
 syms x y z
