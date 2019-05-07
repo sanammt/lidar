@@ -42,7 +42,7 @@ Neff_max = max(Neff_max_1,Neff_max_2)
 
 
 %%% Get Neff
-NeffQ='What is the value for Neff?\n';
+NeffQ='What is the value for Neff?';
 Neff=input(NeffQ);
 
 eps_r=Neff^2
@@ -55,16 +55,18 @@ cond3 = (Neff > n_cl) % close to n_cl
 
 NeffOkey1=cond1 & cond2 & cond3;
 while (NeffOkey1 == 0)
-   NeffQ='What is the value for Neff?\n';
-   Neff=input(NeffQ);
-   eps_r=Neff^2
-   cond1 = (Neff ~= lam/d)
-   % Neff > sqrt(eps_s) 
-   cond2 = (Neff > sqrt(eps_s))
-   leakage_factor =((eps_r - eps_cl)*sin(pi*dc))^2;
-   cond3 = (Neff > n_cl) % close to n_cl
-   NeffOkey1=cond1 & cond2 & cond3;
- end
+   NeffQ='What is the value for Neff?';
+Neff=input(NeffQ);
+
+eps_r=Neff^2
+cond1 = (Neff ~= lam/d)
+
+% Neff > sqrt(eps_s)
+cond2 = (Neff > sqrt(eps_s))
+leakage_factor =((eps_r - eps_cl)*sin(pi*dc))^2;
+cond3 = (Neff > n_cl) % close to n_cl
+ 
+end
 n_g=dc*Neff+(1-dc)*Neff
 eps_g=n_g^2
 tg=(0.25*lam)/sqrt(eps_g-(Neff-lam/d)^2)

@@ -48,12 +48,9 @@ ezplot(2*x-y==n_s,[1,xylimit,1,xylimit]) % f3>0
 ezplot(x-y==0,[1,xylimit,1,xylimit])     % f4~=0
 ezplot(y-0.0001*x==n_s,[1,xylimit,1,xylimit]) % f5>0
 title([])
-xlabel('\lambda/d \rightarrow','FontSize',16);
-ylabel('N \uparrow','FontSize',16);
-set(get(gca,'ylabel'),'rotation',0);
-% set(get(gca, 'ylabel'), 'Position', get(gca, 'ylabel') + [-0.5 0 0]);
-ylabh = get(gca,'ylabel');
-set(ylabh,'Position',get(ylabh,'Position') + [-0.1 0.1 0]);
+xlabel('\lambda/d');
+ylabel('')
+
 
 %
 clear x
@@ -101,7 +98,7 @@ txt4 = '$$\downarrow N = \sqrt\epsilon_s $$';
 text(2,1.5,txt4,'Interpreter','latex')
 
 txt5 = '$$\leftarrow \frac{\lambda}{d} - N = \sqrt\epsilon_s $$';
-text(2.1,2.75,txt5,'Interpreter','latex')
+text(2,2.5,txt5,'Interpreter','latex')
 
 txt6 = 'Forward';
 text(2.4,3,txt6,'FontSize',14,'Color','red','FontWeight','bold')
