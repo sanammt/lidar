@@ -27,10 +27,13 @@ close all
 % dlam_micron=dlam*(10^-6)
 % clear all
 % close all
-
-lam =1.55 % micron
-d = 0.40 % pitch in micron
+ilam=0
+for lam=[1.35 1.55 1.65] % micron
+    ilam=ilam+1;
+%lam =1.55 % micron
+d = 0.4 % pitch in micron
 dc = 0.6 %duty cycle
+tg=0.2 % micron
 n_cl = 1.44
 eps_cl=n_cl^2
 n_etch = 1.44
@@ -119,10 +122,13 @@ text(lam/d,sqrt(eps_s)+0.1,txt7,'Interpreter','latex')
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % abs(Neff-lam/d)<1 (1=n_cl?)
 Neff_max_1=lam/d + n_cl; % Neff < lam/d + n_cl
-Neff_min=lam/d - n_cl % Neff > lam/d - n_cl
+Neff_min_temp(ilam)=lam/d - n_cl % Neff > lam/d - n_cl
 Neff_max_2 = (2*lam)/d - sqrt(eps_s);
-Neff_max = max(Neff_max_1,Neff_max_2)
-
+Neff_max_temp(ilam) = max(Neff_max_1,Neff_max_2)
+end
+Neff_min=max(Neff_min_temp)
+Neff_max=min(Neff_max_temp)
+lam=1.55 % micron
 
 %%% Get Neff
 NeffQ='What is the value for Neff?\n';
@@ -173,31 +179,39 @@ for i=1:length(dcArray)
             dc_tg=dcArray(i);
             Neff_tg=NeffArray(j);
             d_tg=dArray(k);
-            tg(id_tg)=(0.25*lam)/sqrt(eps_g-(NeffArray(j)-lam/dArray(k))^2);
+            tg_temp(id_tg)=(0.25*lam)/sqrt(eps_g-(NeffArray(j)-lam/dArray(k))^2);
 %             sprintf('dc=%2.2f Neff=%2.2f d=%2.2f => tg=%2.2f',dcArray(i),NeffArray(j),dArray(k),tg)
         end
     end
 end
-tgMax=min(tg)
-tgQ='What is the value for tg?\n';
-tg=input(tgQ);
-dc1=0.6:0.05:0.75;
-leakage_factor = ((eps_g-eps_cl)*sin(dc1*pi)).^2
-figure('name','leakage_factor');
-plot(dc1,leakage_factor)
-
+tgMax=min(tg_temp)
+if (tg > tgMax)
+    tgQ='What is the value for tg?\n';
+    tg=input(tgQ);
+end
+% dc1=0.6:0.05:0.75;
+% leakage_factor = ((eps_g-eps_cl)*sin(dc1*pi)).^2
+% figure('name','leakage_factor');
+% plot(dc1,leakage_factor)
+% 
+% 
+% lam1=1.35:0.05:1.65;
+% Wc_fact=sqrt(1-(Neff-(lam1/d).^2)/eps_cl);
+% figure('name','wc_factor');
+% plot(lam1,Wc_fact)
 
 lam1=1.35:0.05:1.65;
-Wc_fact=sqrt(1-(Neff-(lam1/d).^2)/eps_cl);
-figure('name','wc_factor');
-plot(lam1,Wc_fact)
-
-
 theta1 = asind((Neff-(lam1/d))/n_cl)
 fov1=max(theta1)-min(theta1)
 
 theta2=n_cl*theta1;
 fov2=max(theta2)-min(theta2)
+sprintf('Neff (effective film)=%4.4f',Neff)
+sprintf('tg (etch depth)=%4.4f',tg)
+sprintf('d (pitch)=%4.4f',d)
+sprintf('dc=%4.4f',dc)
+sprintf('n_s (isolator below the thin film )=%4.4f',n_s)
+sprintf('n_cl (upper cladding and the groove)=%4.4f',n_cl)
 
 
 
@@ -207,6 +221,8 @@ fov2=max(theta2)-min(theta2)
 % tg=(0.25*lam)/sqrt(eps_g-(Neff-lam/d)^2)
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % % lam=1.55
 % % nc=1.44   % Top cladding in sio2

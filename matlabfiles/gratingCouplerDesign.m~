@@ -27,11 +27,13 @@ close all
 % dlam_micron=dlam*(10^-6)
 % clear all
 % close all
-
-lam =1.55 % micron
-d = 0.500 % pitch in micron
+ilam=0
+for lam=[1.35 1.55 1.65] % micron
+    ilam=ilam+1;
+%lam =1.55 % micron
+d = 0.40 % pitch in micron
 dc = 0.6 %duty cycle
-n_cl = 1
+n_cl = 1.44
 eps_cl=n_cl^2
 n_etch = 1.44
 eps_g=n_etch^2
@@ -119,9 +121,11 @@ text(lam/d,sqrt(eps_s)+0.1,txt7,'Interpreter','latex')
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % abs(Neff-lam/d)<1 (1=n_cl?)
 Neff_max_1=lam/d + n_cl; % Neff < lam/d + n_cl
-Neff_min=lam/d - n_cl % Neff > lam/d - n_cl
+Neff_min_temp(ilam)=lam/d - n_cl % Neff > lam/d - n_cl
 Neff_max_2 = (2*lam)/d - sqrt(eps_s);
-Neff_max = max(Neff_max_1,Neff_max_2)
+Neff_max(ilam) = max(Neff_max_1,Neff_max_2)
+end
+Neff_min=max
 
 
 %%% Get Neff
@@ -168,7 +172,7 @@ for i=1:length(dcArray)
     for j=1:length(NeffArray)
         for k=1:length(dArray)
             id_tg=id_tg+1;
-            n_g=dcArray(i)*NeffArray(j)+(1-dcArray(i))*n_cl;
+            n_g=dcArray(i)*NeffArray(j)+(1-dcArray(i))*n_etch;
             eps_g=n_g^2;
             dc_tg=dcArray(i);
             Neff_tg=NeffArray(j);
@@ -193,11 +197,11 @@ figure('name','wc_factor');
 plot(lam1,Wc_fact)
 
 
-theta = asind((Neff-(lam1/d))/n_cl)
-fov=max(theta)-min(theta)
+theta1 = asind((Neff-(lam1/d))/n_cl)
+fov1=max(theta1)-min(theta1)
 
-
-
+theta2=n_cl*theta1;
+fov2=max(theta2)-min(theta2)
 
 
 
