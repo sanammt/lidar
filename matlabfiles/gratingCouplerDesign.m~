@@ -31,45 +31,180 @@ close all
 lam =1.55 % micron
 d = 0.500 % pitch in micron
 dc = 0.6 %duty cycle
-n_cl = 1.44
-eps_cl=sqrt(n_cl)
+n_cl = 1
+eps_cl=n_cl^2
+n_etch = 1.44
+eps_g=n_etch^2
 eps_s = 1.44^2 % substrate (must be isolator) permittivity
+k0=2*pi/lam
+%%%%%%%%%%%%%%%%
+xylimit=4;
+syms x y
+n_air = 1;
+n_s=sqrt(eps_s);
+f1=y-x-n_cl; %y-x<n_air => f1<0
+f2=x-y-n_cl; %x-y>n_air =f2>0
+f3=2*x-y-n_s; % 2*x-y>n_s =>f3>0
+f4=y-x; %y~=x => f4~=0
+f5=y-0.0001*x-n_s; %y>ns => f5>0
+ezplot(y-x==n_cl,[1,xylimit,1,xylimit]) % f1<0
+hold on
+ezplot(x-y==n_cl,[1,xylimit,1,xylimit]) % f2>0
+ezplot(2*x-y==n_s,[1,xylimit,1,xylimit]) % f3>0
+ezplot(x-y==0,[1,xylimit,1,xylimit])     % f4~=0
+ezplot(y-0.0001*x==n_s,[1,xylimit,1,xylimit]) % f5>0
+ezplot(0.0001*y+x==lam/d,[1,xylimit,1,xylimit]) % x=lam/d
+title([])
+xlabel('\lambda/d \rightarrow','FontSize',16);
+ylabel('N \uparrow','FontSize',16);
+set(get(gca,'ylabel'),'rotation',0);
+% set(get(gca, 'ylabel'), 'Position', get(gca, 'ylabel') + [-0.5 0 0]);
+ylabh = get(gca,'ylabel');
+set(ylabh,'Position',get(ylabh,'Position') + [-0.1 0.1 0]);
+
+%
+clear x
+x=linspace(1, xylimit);
+y11=x+n_cl; %y-x<n_air => f1<0
+y21=x-n_cl; %x-y>n_air =f2>0
+y12=2*x-n_s; % 2*x-y>n_s =>f3>0
+y3=x.*0+n_s; %y>ns => f5>0
+y13=min(y11,y12);
+y1=max(y13,y3);
+y2=max(y21,y3);
+y41=x; %y~=x => f4~=0
+y4=max(y41,y3);
+%f4=y-x; %y~=x => f4~=0
+
+
+% plot(x, y1, 'r', 'LineWidth', 2);
+ ylim([1 xylimit])
+% plot(x, y4, 'r', 'LineWidth', 2);
+x2 = [x, fliplr(x)];
+inBetween1 = [y1, fliplr(y4)];
+fill(x2, inBetween1, 'y');
+
+
+% plot(x, y2, 'b', 'LineWidth', 2);
+inBetween2 = [y2, fliplr(y4)];
+fill(x2, inBetween2, 'c');
+%txt = '$$\bullet \leftarrow 0.25t e^{-0.005t} at t = 300 \int_{0}^{2} x^2\sin(x) dx $$';
+%txt2 ='$$ \int_{0}^{2} x^2\sin(x) dx $$'; 
+%txt='hello'
+txt1 = '$$\leftarrow \frac{\lambda}{d} - N= n_{cl} $$';
+text(3.5,2.5,txt1,'Interpreter','latex')
+
+txt2 = '$$\leftarrow N-\frac{\lambda}{d}= n_{cl} $$';
+text(2.75,3.74,txt2,'Interpreter','latex')
+
+txt3 = '$$\leftarrow N = \frac{\lambda}{d} $$';
+text(3,3,txt3,'Interpreter','latex')
+
+txt4 = '$$\downarrow N = \sqrt\epsilon_s $$';
+text(2,1.5,txt4,'Interpreter','latex')
+
+txt5 = '$$\leftarrow \frac{\lambda}{d} - N = \sqrt\epsilon_s $$';
+text(2.1,2.75,txt5,'Interpreter','latex')
+
+txt6 = 'Forward';
+text(2.4,3,txt6,'FontSize',14,'Color','red','FontWeight','bold')
+txt7 = 'Backward';
+text(2.4,2.05,txt7,'FontSize',14,'Color','red','FontWeight','bold')
+
+txt7 = '$$\leftarrow \frac{\lambda}{d}$$';
+text(lam/d,sqrt(eps_s)+0.1,txt7,'Interpreter','latex')
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
 % abs(Neff-lam/d)<1 (1=n_cl?)
-Neff_max_1=lam/d + n_cl % Neff < lam/d + n_cl
+Neff_max_1=lam/d + n_cl; % Neff < lam/d + n_cl
 Neff_min=lam/d - n_cl % Neff > lam/d - n_cl
-Neff_max_2 = (2*lam)/d - sqrt(eps_s)
+Neff_max_2 = (2*lam)/d - sqrt(eps_s);
 Neff_max = max(Neff_max_1,Neff_max_2)
 
 
 %%% Get Neff
-NeffQ='What is the value for Neff?';
+NeffQ='What is the value for Neff?\n';
 Neff=input(NeffQ);
 
 eps_r=Neff^2
 cond1 = (Neff ~= lam/d)
+beta0=Neff*k0;
 
 % Neff > sqrt(eps_s)
 cond2 = (Neff > sqrt(eps_s))
 leakage_factor =((eps_r - eps_cl)*sin(pi*dc))^2;
 cond3 = (Neff > n_cl) % close to n_cl
 
-NeffOkey1=cond1 & cond2 & cond3;
+
+
+condf1= (abs(Neff-lam/d)<n_cl); %y-x<n_air => f1<0
+condf3=(2*lam/d-Neff>n_s); % 2*x-y>n_s =>f3>0
+
+
+NeffOkey1=cond1 & cond2 & cond3 & condf1 & condf3;
 while (NeffOkey1 == 0)
-   NeffQ='What is the value for Neff?';
-Neff=input(NeffQ);
-
-eps_r=Neff^2
-cond1 = (Neff ~= lam/d)
-
-% Neff > sqrt(eps_s)
-cond2 = (Neff > sqrt(eps_s))
-leakage_factor =((eps_r - eps_cl)*sin(pi*dc))^2;
-cond3 = (Neff > n_cl) % close to n_cl
- 
+   disp(Neff_min)
+   disp(Neff_max)
+   NeffQ='Repeat: What is the value for Neff?\n';
+   Neff=input(NeffQ);
+   eps_r=Neff^2;
+   cond1 = (Neff ~= lam/d);
+   % Neff > sqrt(eps_s) 
+   cond2 = (Neff > sqrt(eps_s));
+   leakage_factor =((eps_r - eps_cl)*sin(pi*dc))^2;
+   cond3 = (Neff > n_cl); % close to n_cl
+   condf1= (abs(Neff-lam/d)<n_cl); %y-x<n_air => f1<0
+   condf3=(2*lam/d-Neff>n_s); % 2*x-y>n_s =>f3>0
+   NeffOkey1=cond1 & cond2 & cond3 & condf1 & condf3;
 end
-n_g=dc*Neff+(1-dc)*Neff
-eps_g=n_g^2
-tg=(0.25*lam)/sqrt(eps_g-(Neff-lam/d)^2)
+ 
+dcArray=0.55:0.1:0.7;%[0.55 0.6 0.65 0.7];
+NeffArray=1.8:0.1:2.8;%[1.8 2.2 2.6 2.8];
+dArray=0.4:0.2:0.8;%[0.45 0.5 0.55 0.6 0.7];
+id_tg=0;
+for i=1:length(dcArray)
+    for j=1:length(NeffArray)
+        for k=1:length(dArray)
+            id_tg=id_tg+1;
+            n_g=dcArray(i)*NeffArray(j)+(1-dcArray(i))*n_cl;
+            eps_g=n_g^2;
+            dc_tg=dcArray(i);
+            Neff_tg=NeffArray(j);
+            d_tg=dArray(k);
+            tg(id_tg)=(0.25*lam)/sqrt(eps_g-(NeffArray(j)-lam/dArray(k))^2);
+%             sprintf('dc=%2.2f Neff=%2.2f d=%2.2f => tg=%2.2f',dcArray(i),NeffArray(j),dArray(k),tg)
+        end
+    end
+end
+tgMax=min(tg)
+tgQ='What is the value for tg?\n';
+tg=input(tgQ);
+dc1=0.6:0.05:0.75;
+leakage_factor = ((eps_g-eps_cl)*sin(dc1*pi)).^2
+figure('name','leakage_factor');
+plot(dc1,leakage_factor)
+
+
+lam1=1.35:0.05:1.65;
+Wc_fact=sqrt(1-(Neff-(lam1/d).^2)/eps_cl);
+figure('name','wc_factor');
+plot(lam1,Wc_fact)
+
+
+theta = asind((Neff-(lam1/d))/n_cl)
+fov=max(theta)-min(theta)
+
+
+
+
+
+
+
+% n_g=dc*Neff+(1-dc)*Neff
+% eps_g=n_g^2
+% tg=(0.25*lam)/sqrt(eps_g-(Neff-lam/d)^2)
 
 
 % 
