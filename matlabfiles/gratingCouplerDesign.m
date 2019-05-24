@@ -29,11 +29,14 @@ close all
 % close all
 ilam=0
 for lam=[1.35 1.55 1.65] % micron
+%for lam=[1.55] % micron
     ilam=ilam+1;
 %lam =1.55 % micron
-d = 0.4 % pitch in micron
+d = 0.55 % pitch in micron
 dc = 0.6 %duty cycle
-tg=0.2 % micron
+tg=0.12 % micron
+L=100 % micron
+fwhm =1.5*10^(-3) % micron
 n_cl = 1.44
 eps_cl=n_cl^2
 n_etch = 1.44
@@ -41,7 +44,7 @@ eps_g=n_etch^2
 eps_s = 1.44^2 % substrate (must be isolator) permittivity
 k0=2*pi/lam
 %%%%%%%%%%%%%%%%
-xylimit=4;
+xylimit=5;
 syms x y
 n_air = 1;
 n_s=sqrt(eps_s);
@@ -59,7 +62,7 @@ ezplot(y-0.0001*x==n_s,[1,xylimit,1,xylimit]) % f5>0
 ezplot(0.0001*y+x==lam/d,[1,xylimit,1,xylimit]) % x=lam/d
 title([])
 xlabel('\lambda/d \rightarrow','FontSize',16);
-ylabel('N \uparrow','FontSize',16);
+ylabel('Neff \uparrow','FontSize',16);
 set(get(gca,'ylabel'),'rotation',0);
 % set(get(gca, 'ylabel'), 'Position', get(gca, 'ylabel') + [-0.5 0 0]);
 ylabh = get(gca,'ylabel');
@@ -94,28 +97,28 @@ fill(x2, inBetween2, 'c');
 %txt = '$$\bullet \leftarrow 0.25t e^{-0.005t} at t = 300 \int_{0}^{2} x^2\sin(x) dx $$';
 %txt2 ='$$ \int_{0}^{2} x^2\sin(x) dx $$'; 
 %txt='hello'
-txt1 = '$$\leftarrow \frac{\lambda}{d} - N= n_{cl} $$';
-text(3.5,2.5,txt1,'Interpreter','latex')
+txt1 = '$$\leftarrow \frac{\lambda}{d} - Neff= n_{cl} $$';
+text(4,2.5,txt1,'Interpreter','latex')
 
-txt2 = '$$\leftarrow N-\frac{\lambda}{d}= n_{cl} $$';
-text(2.75,3.74,txt2,'Interpreter','latex')
+txt2 = '$$\leftarrow Neff-\frac{\lambda}{d}= n_{cl} $$';
+text(3.15,4.5,txt2,'Interpreter','latex')
 
-txt3 = '$$\leftarrow N = \frac{\lambda}{d} $$';
-text(3,3,txt3,'Interpreter','latex')
+txt3 = '$$\leftarrow Neff = \frac{\lambda}{d} $$';
+text(3.5,3.5,txt3,'Interpreter','latex')
 
-txt4 = '$$\downarrow N = \sqrt\epsilon_s $$';
+txt4 = '$$\downarrow Neff = \sqrt\epsilon_s $$';
 text(2,1.5,txt4,'Interpreter','latex')
 
-txt5 = '$$\leftarrow \frac{\lambda}{d} - N = \sqrt\epsilon_s $$';
-text(2.1,2.75,txt5,'Interpreter','latex')
+txt5 = '$$\leftarrow 2\frac{\lambda}{d} - Neff = \sqrt\epsilon_s $$';
+text(2.5,3.5,txt5,'Interpreter','latex')
 
 txt6 = 'Forward';
 text(2.4,3,txt6,'FontSize',14,'Color','red','FontWeight','bold')
 txt7 = 'Backward';
 text(2.4,2.05,txt7,'FontSize',14,'Color','red','FontWeight','bold')
 
-txt7 = '$$\leftarrow \frac{\lambda}{d}$$';
-text(lam/d,sqrt(eps_s)+0.1,txt7,'Interpreter','latex')
+txt8 = '$$\leftarrow \frac{\lambda}{d}$$';
+text(lam/d,sqrt(eps_s)+0.1,txt8,'Interpreter','latex')
 
 
 
@@ -206,12 +209,26 @@ fov1=max(theta1)-min(theta1)
 
 theta2=n_cl*theta1;
 fov2=max(theta2)-min(theta2)
+
+fwhm_Neff_145 = (lam1(1)^2/(2*pi*L*Neff))*1000 %nano meter
+fwhm_Neff_165 = (lam1(3)^2/(2*pi*L*Neff))*1000 %nano meter
+fwhm_Neff = (lam^2/(2*pi*L*Neff))*1000 %nano meter
+Neff_fwhm = (lam^2/(2*pi*L*fwhm)) %nano meter
+
 sprintf('Neff (effective film)=%4.4f',Neff)
+sprintf('Neff_fwhm (effective film)=%4.4f',Neff_fwhm)
+sprintf('fwhm_Neff (effective film)=%4.4f',fwhm_Neff)
 sprintf('tg (etch depth)=%4.4f',tg)
 sprintf('d (pitch)=%4.4f',d)
 sprintf('dc=%4.4f',dc)
 sprintf('n_s (isolator below the thin film )=%4.4f',n_s)
 sprintf('n_cl (upper cladding and the groove)=%4.4f',n_cl)
+
+
+
+
+
+
 
 
 
