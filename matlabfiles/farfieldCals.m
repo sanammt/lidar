@@ -1,0 +1,52 @@
+clear all
+close all
+farfieldFile='f2d_full.txt';
+farfieldAnlgle='fangle_1350.txt';
+farfieldData=load(farfieldFile);
+farfieldAngleData=load(farfieldAnlgle);
+sizeData=size(farfieldData)
+sizeAngleData=size(farfieldAngleData)
+tol=0.002;
+lamda=linspace(1335,1360,50)
+
+for i=1:1:sizeData(2)
+% for i=1:1:1
+    y{i}=farfieldData(:,i);
+    maxy{i} = max(y{i});
+    f{i}=find(y{i}==maxy{i})
+    y1{i}=y{i}/maxy{i};
+    y_fwhm=1/sqrt(2);
+    theta_peakPower=farfieldAngleData(f{i},1);
+    f_fwhm{i}=find((y1{i}<y_fwhm+tol) & ((y1{i}>y_fwhm-tol)))
+    while (size(f_fwhm{i}) < 2)
+        tol=tol+0.0005;
+        f_fwhm{i}=find((y1{i}<y_fwhm+tol) & ((y1{i}>y_fwhm-tol)));
+    end
+    while (size(f_fwhm{i}) > 2)
+        tol=tol-0.00005;
+        f_fwhm{i}=find((y1{i}<y_fwhm+tol) & ((y1{i}>y_fwhm-tol)));
+    end
+    if (size(f_fwhm{i}) ~= 2)
+        disp('WARNNIG')
+    end
+    tol=0.002;
+    theta1=farfieldAngleData(f_fwhm{i}(1),1)
+    theta2=farfieldAngleData(f_fwhm{i}(2),1)
+    fwhm{i}=abs(theta2-theta1)
+    disp('----------')
+end
+plot(farfieldAngleData(:,1),y1{1})
+hold on
+for i=2:1:sizeData(2)
+    plot(farfieldAngleData(:,1),y1{i})
+end
+hold on
+
+
+
+x=linspace(-100,100,1000);
+y=0+0*x+11.3827*x.^2+0.0005*x.^3-0.0011*x.^4;
+fwhm
+
+
+

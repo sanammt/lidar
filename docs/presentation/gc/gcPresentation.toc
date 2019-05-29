@@ -1,0 +1,9 @@
+\beamer@endinputifotherversion {3.33pt}
+\beamer@sectionintoc {1}{GC basics}{3}{0}{1}
+\beamer@sectionintoc {2}{Design Constraints and Spec}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{Effective index}{4}{0}{2}
+\beamer@subsectionintoc {2}{2}{Narrow beam}{6}{0}{2}
+\beamer@subsectionintoc {2}{3}{Low loss}{8}{0}{2}
+\beamer@subsectionintoc {2}{4}{Grating thickness}{10}{0}{2}
+\beamer@sectionintoc {3}{Optimization}{12}{0}{3}
+\beamer@sectionintoc {4}{Numerical results}{13}{0}{4}
