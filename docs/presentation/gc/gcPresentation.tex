@@ -189,7 +189,7 @@ n^2_	\parallel \,= \, f_{swg} n^2_1 \, + \, (1-f_{swg})n^2_2 \\
     \begin{equation}
     \alpha \simeq (\epsilon_r \,- \, \epsilon_{cl})^2 \, \sin^2(\pi f /d)
     \end{equation}
-\item For minimum loss the index of grating and cladding should be as close as possible (again SWG will help us with that) and also we need to keep away from f=0.5 duty cycle. Again here need would need an \underline{optimization} for $f$ to have low loss, narrow beam and wider FOV.
+\item For minimum loss the index of grating and cladding should be as close as possible (again SWG will help us with that) and also we need to keep away from f=0.5 duty cycle. Again here need would need an \underline{optimization} for $f$.
 \item Thickness of grating ($t_g$) also affects the leakage. Increasing $t_g$ will increase the leakage but at some point we will get to the saturation point where leakage only have small oscillations as shown in figure \ref{loss1}.
 \end{itemize}
 \end{frame}
@@ -242,16 +242,43 @@ n^2_	\parallel \,= \, f_{swg} n^2_1 \, + \, (1-f_{swg})n^2_2 \\
 \begin{frame}
 \frametitle{Optimization on GC}
 \begin{itemize}
-\item  The design of GC involves many parameters, based on fundamental physics of GC we can define some of them but not all.
-\item We need iterations and choose the based design which can be time consuming
+\item  The design of GC involves many parameters. Based on fundamental physics of GC we can define some of them but not all.
+\item We need to run iterations and then choose the best design. This process can be time consuming
 \item Using Principal Components Analysis we can reduce he dimension of our variables which will result in reduction of iteration which will save time.
 \end{itemize}
 \end{frame}
+%
 \section{Numerical results} 
 \begin{frame}
 \frametitle{Numerical results}
 \begin{itemize}
-\item  Here is an example, it is valid but can be more optimized, using this structure I could achieve a narrow beam with $FWHM \, = \, 1^{\circ}$ and a $FOV \,  = \, $
+\item  Here is the output of my design, it is a valid design but can be even more optimized. In the conference there was a talk on AI and PIC (from NRC Ottawa), which was really interesting. I'm going to apply the "Principal Components Analysis" on this GC design and see if I can get to better optimizes solution.
+\begin{figure}[H]
+%\begin{center}
+\includegraphics[width=8cm, height=6cm]{Figures/fov1335_1360}
+\caption{Desgined GC}
+\label{numerical results}
+%\end{center}
+\end{figure}
+\end{itemize}
+\end{frame}
+%
+\begin{frame}
+\frametitle{Numerical results}
+\begin{itemize}
+\item  Using this structure I could achieve a narrow beam with $FWHM \, = \, 1^{\circ}$ and a $FOV \,  = \, 32^{\circ}$, which gives us a resolution of 32. This is higher resolution than what is in the literature.
+\item Based on [6]"To date, OPA steering resolution has been limited. To our knowledge, the widest demonstrated steering range of any OPA
+was $51^{\circ}$; however, the beam divergence was relatively large $(3.3^{\circ})[9]$. The narrowest beam divergence was $0.3^{\circ}$; however, the steerable range was relatively small $(0.9^{\circ}) [12]$. The highest-resolution device had a resolution of 23, achieving the best ratio of steering range to beam divergence $(23^{\circ}$ and $1^{\circ}$, respectively) [10]."
+\end{itemize}
+\end{frame}
+%
+\section{Phase Shifting} 
+\begin{frame}
+\frametitle{Phase Shifting}
+\begin{itemize}
+\item  At the conference there were talks about PIN depletion based phase shifting (the phase shifting were more for modulation and not beam scanning)
+\item One researcher actually described the fabrication process for their PIN design. It tells me that we were on the right thought with the idea in our very preliminary design. 
+\item In general there were designs that looked fabrication challenging but there was not much emphasis on that. Fabrication processes in improving as we go.
 \end{itemize}
 \end{frame}
 
@@ -566,19 +593,24 @@ n^2_	\parallel \,= \, f_{swg} n^2_1 \, + \, (1-f_{swg})n^2_2 \\
 \bibitem1- [Dirk TAILLAERT and Frederik VAN LAERE, 2006]{pub2000} Dirk TAILLAERT and Frederik VAN LAERE, The Japan Society of Applied Physics (2006)
 \newblock Grating Couplers for Coupling between Optical Fibers and Nanophotonic Waveguides
 %
-\bibitem 2- [FAEZEH FESHARAKI and NADIR HOSSAIN, 2016]{oe241821027beamwidth} FAEZEH FESHARAKI and NADIR HOSSAIN, Optics Express (2016)
+% oe241821027beamwidth
+\bibitem 2- [FAEZEH FESHARAKI and NADIR HOSSAIN, 2016]{} FAEZEH FESHARAKI and NADIR HOSSAIN, Optics Express (2016)
 \newblock Accurate theoretical and experimental characterization of optical grating coupler
 %
-\bibitem 3- [T Tamir and T. Peng, 1977]{tamirPeng1977} T Tamir and T. Peng,  Sensors(1977)
+% tamirPeng1977
+\bibitem 3- [T Tamir and T. Peng, 1977]{} T Tamir and T. Peng,  Sensors(1977)
 \newblock Analysis and Design of Grating Couples
 %
-\bibitem 4- [Yoo-Seung Hong and Chun-Hyung Cho, 2018]{hongChoSungFWHMsize} Yoo-Seung Hong and Chun-Hyung Cho,  Applied Physics by Spring Verlag(2018)
+% hongChoSungFWHMsize
+\bibitem 4- [Yoo-Seung Hong and Chun-Hyung Cho, 2018]{} Yoo-Seung Hong and Chun-Hyung Cho,  Applied Physics by Spring Verlag(2018)
 \newblock Design Parameter Optimization of a Silicon-Based Grating Waveguide for Performance Improvement in Biochemical Sensor Application
 %
-\bibitem 5- [Zhang and Tamir, 1993]{00248941} Zhang and Tamir,  IEEE (1993)
+% 00248941
+\bibitem 5- [Zhang and Tamir, 1993]{} Zhang and Tamir,  IEEE (1993)
 \newblock Analysis and Design of Broadband Grating couplers
 %
-\bibitem 6- [DAVID N. HUTCHISON and JIE SUN, 2016]{pic2} DAVID N. HUTCHISON and JIE SUN,  IEEE (2016)
+% pic2
+\bibitem 6- [DAVID N. HUTCHISON and JIE SUN, 2016]{} DAVID N. HUTCHISON and JIE SUN,  IEEE (2016)
 \newblock High-resolution aliasing-free optical beam steering
 %
 %%\newblock \emph{Journal Name} 12(3), 45 -- 678.
