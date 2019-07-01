@@ -281,7 +281,51 @@ was $51^{\circ}$; however, the beam divergence was relatively large $(3.3^{\circ
 \item In general there were designs that looked fabrication challenging but there was not much emphasis on that. Fabrication processes in improving as we go.
 \end{itemize}
 \end{frame}
+%
+\section{Mode Analytics} 
+\begin{frame}
+\frametitle{Mode Analytics}
+Design spec for waveguide:
+\begin{enumerate}
+\item Fundamental mode must be TE.\label{spec1}
+\item To be single mode over the range of wavelength sweep. \label{spec2}
+\item Because of Silicon transparency window, the wavelength must be over $1.1 \mu m$
+\item Because of the fabrication limitations the hight is $b=220 nm$.
+\end{enumerate}
+%
+\begin{itemize}
+\item  For a rectangle waveguide $a \times b$ where a is the width and b is the hight we will have a cut off frequency defined by
+\begin{equation}
+f_c =\frac{c}{2\pi N} \sqrt{(\frac{m\pi}{a})^2 +(\frac{n\pi}{b})^2}
+\end{equation}
+$f_c$ is the lowest frequency (the largest wavelength) generating propagation in the waveguide which is dictated by the dimensions of the waveguide and it's material (index of refraction). 
+\end{itemize}
+\end{frame}
+%
+\begin{frame}
+\frametitle{Mode Analytics Continued}
+\begin{itemize}
+\item To fulfill specs \ref{spec1}-\ref{spec2} the first two modes must be $m=0$ or $n=0$ which would give us $TE_{10}$ and $TE_{01}$. Frequencies associated with these 2 mode with define the the input laser wavelength window.
+\item I put these constraints and specs  in a Matlab code and generate the possible design options. 
+\item Going through the option we see that with a width of 300 or 400 nm, with the index of refraction between 2.7 to 2.9 we can satisfy our design spec.
+\item Lumerical's Mode Solution also confirmed the Matlab data.
+\end{itemize}
+\end{frame}
+%
+\section{swg; fundamentals} 
+\begin{frame}
+\frametitle{Vertical swg structure}
+\begin{figure}[H]
+%\begin{center}
+\includegraphics[width=3cm, height=2cm]{Figures/swg_v}
+\includegraphics[width=5cm, height=4cm]{Figures/neff_vs_DCswg_Lswg0p8_wgW0p4.jpg}
+\caption{\small{Vertical swg}}
+\label{vSwg}
+%\end{center}
+\end{figure}
 
+\end{frame}
+%
 
 
 
