@@ -1,0 +1,29 @@
+fdtdFieName="swg_v_2d.fsp";
+load(fdtdFieName); 
+ ii=0;
+ for (DCswg=0.5:0.1:0.7)
+ {
+     ii=ii+1;
+     #switchtolayout;
+     select("grating_coupler_2D_v_zIsWidth");
+     ?get("duty cycle");
+     #set("duty cycle",DCswg);
+     Lplot= get("target length");
+     wplot= get("target width");
+     hplot= get("h total");
+     ?get("duty cycle");
+     #run;
+     monitorName="fullProfile";
+     xData=getresult("fullProfile","x");
+     yData=getresult("fullProfile","y");
+     Ez=getresult("fullProfile","Ez");
+     ?PlotTitle="Field_" + "_DC" + num2str(100*DCswg)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6);
+     plot(x,real(Ez),"x","Field");
+     setplot("title",PlotTitle);
+     #setplot("x min",0);
+     #setplot("x max",15e-6);
+     #
+     ##?MatlabFileName="Ez_"+num2str(ii)+".mat";
+     ##matlabsave (MatlabFileName, Ez,x,y);
+     ##EzFileName(ii)=getresult("fullProfile","Ez");
+      }

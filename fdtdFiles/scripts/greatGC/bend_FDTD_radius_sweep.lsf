@@ -1,0 +1,27 @@
+# bend_FDTD_radius_sweep.lsf - 3D-FDTD script to calculate the loss in a 90 degree bend versus bend-radius, including mode expansion
+
+#bend_radius_sweep=[1]*1e-6;  # bend radii to sweep
+width_wg_sweep=[0.4]*1e-6;  # bend radii to sweep
+
+L=length(width_wg_sweep);   T=matrix(3,L);
+for(ii=1:L)
+{
+	newproject; switchtolayout; redrawoff; 
+	selectall; delete;
+	width_wg = width_wg_sweep(ii);
+	bend_draw;        # draw the waveguides
+	bend_FDTD_setup;  # setup the FDTD simulations
+	save('bend_radius_'+ num2str(ii));
+	#run; 
+	#E=getresult('full_profine_Z_normal', 'Ez');
+	#EZ=E.EZ;
+        #T_fund=getresult('expansion', 'expansion for T');
+        #T_forward=T_fund.getattribute('T_forward');
+        #T(1,ii)=T_forward; 
+        #T(2,ii)=transmission('transmission');  # total output power in WG
+        #T(3,ii)=transmission('input');  # output power in fundamental mode
+}
+#plot(bend_radius_sweep, -10*log10(T(1,1:ii)));
+#plot(bend_radius_sweep, -10*log10(T(1,1:ii)/T(3,1:ii)), -10*log10(T(2,1:ii)/T(3,1:ii)));
+#legend ('Transmission, in fundamental mode', 'Transmission, total');
+#matlabsave ('H:\Lumerical\Bend\bend.mat', bend_radius_sweep, T);
