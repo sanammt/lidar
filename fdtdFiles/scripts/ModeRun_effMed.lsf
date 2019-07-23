@@ -1,0 +1,18 @@
+clear all;
+fdeFileName="ChechModes_effMed.lms";
+load(fdeFileName);
+
+width_range=[0.4, 0.6]*1e-6;
+n_width=length(width_range);
+effIndex=getmaterial("effMedium","Refractive Index");
+effIndexStart=1.7;
+effIndexEnd=3.47; #3.47;
+indexStep=0.01;
+n_index=((effIndexEnd - effIndexStart)/indexStep) +1 ;
+#?"n_width= "+num2str(n_width);
+?"n_index= "+num2str(n_index);
+write("testfileModeEff.txt","n_width= "+num2str(n_width));
+write("testfileModeEff.txt","n_index= "+num2str(n_index));
+neff_mat=matrix(n_index,n_width);
+effMaterialIndex=matrix(n_index,n_width);
+newIndex=effIndexStart;

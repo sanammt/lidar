@@ -1,9 +1,9 @@
 clear;
- closeall;
+closeall;
 fdtdFieName="swg_v_2d.fsp";
 load(fdtdFieName); 
  ii=0;
- for (DCswg=0.3:0.1:0.8)
+ for (DCswg=0.5:0.1:0.8)
  {
      ii=ii+1;
      switchtolayout;
@@ -19,8 +19,8 @@ load(fdtdFieName);
      xData=getresult("fullProfile","x");
      yData=getresult("fullProfile","y");
      Ez=getresult("fullProfile","Ez");
-     ?PlotTitle="Field_3D_" + "_DC" + num2str(100*DCswg)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6);
-     PlotName="Field_3D_" + "_DC" + num2str(100*DCswg)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6) +".jpg";
+     ?PlotTitle="Field_2D_swg_v_" + "_DC" + num2str(100*DCswg)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6);
+     PlotName="Field_2D_swg_v_" + "_DC" + num2str(100*DCswg)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6) +".jpg";
      plot(xData,real(Ez),"xData","Field");
      setplot("title",PlotTitle);
      setplot("x min",0);

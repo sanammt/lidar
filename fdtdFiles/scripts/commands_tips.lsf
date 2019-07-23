@@ -1,0 +1,85 @@
+# commands to extract values in mode solution
+# FDE resutls
+?getdata("mode1");
+?EffIndex=getdata("mode1","neff");
+?neff=real(EffIndex);
+
+# show the name of parameters in FDE
+?getanalysis;
+
+# shows the values for the specified  parameter in FDE
+?getanalysis("number of trial modes");
+?getanalysis("wavelength");
+
+
+
+
+
+# Matrial tips
+ ?getmaterial("Si (Silicon) - Palik");
+# the reults will show the propeties of the chosen materail
+# for this example we will get the following properties
+#name, mesh order,color,anisotropy,type, tolerance, max coefficients
+#make fit passive,improve numerical stability,imaginary weight,specify fit range
+#wavelength min,wavelength max,frequency min,frequency max, sampled 3d data 
+
+?getmaterial("effMedium1"); 
+?getmaterial("effMedium1","type");
+?getmaterial("effMedium1","Refractive Index");
+
+# to get the properies values 
+ ?getmaterial("Si (Silicon) - Palik", make fit passive);
+ 
+ 
+ # to write in a file
+ # for loop
+ "n_index= "+num2str(n_index);
+ write("testfileModeEff.txt","n_width= "+num2str(n_width));
+write("testfileModeEff.txt","n_index= "+num2str(n_index));
+ 
+
+
+# extract data
+monitorName="fullProfile_g"; # is a DFT Monitor
+?getresult(monitorName); # lists the results available in the monitor
+Hx=getresult(monitorName,"Hx");
+xData=getresult(monitorName,"x");  # get the data on x axe
+Ex_midOsilarions=Ex(1,(17:22),(170:230),1); # select a subset of data
+
+# Get fields
+?getresult(monitorName,"E");
+# This is the result:
+# E vs x, y, z, lambda/f
+E=getresult(monitorName,"E");  
+E_val=E.E; # the date of E which is a multi dimentional matrix [1,34,497,3]
+# 3 is x,y,z
+Ex1=E_val(1,:,:,1,1);
+Ey1=E_val(1,:,:,1,2);
+Ez1=E_val(1,:,:,1,3);
+E1=sqrt(Ez1^2+Ez1^2+Ez1^2); # Total E ???
+
+H=getresult(monitorName,"H");
+H_val=H.H;
+Hx1=H_val(1,:,:,1,1);
+Hy1=H_val(1,:,:,1,2);
+Hz1=H_val(1,:,:,1,3);
+H1=sqrt(Hz1^2+Hz1^2+Hz1^2); #Total H ???
+
+# at a particular point
+E1_1=E1(1,20,220,1,1);
+H1_1=H1(1,20,220,1,1);
+
+##########
+Ex2=getresult(monitorName,"Ex"); 
+Ey2=getresult(monitorName,"Ey"); 
+Ez2=getresult(monitorName,"Ez"); 
+Hx2=getresult(monitorName,"Hx");
+Hy2=getresult(monitorName,"Hy");
+Hz2=getresult(monitorName,"Hz");
+max(real(E_val(1,21,:,1,1))); 
+plot(yData,real(E_val(1,5,:,1,1))); # Ex along z at a particular y
+plot(xData,real(E_val(1,:,220,1,1))); # Ex along y at a particular z
+
+for i=1:length(yData){
+    max(i)=max(real(E_val(1,i,:,1,1)));
+    }

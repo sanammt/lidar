@@ -1,0 +1,219 @@
+clear;
+closeall;
+fdtdFieName="swg_effMed_2d_yIsWidth_fixedWidth.fsp";
+load(fdtdFieName); 
+#width_range=[0.36, 0.38, 0.4, 0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.5, 0.55, 0.6]*1e-6;
+width_range=[0.4, 0.6]*1e-6;
+n_width=length(width_range);
+
+ ii=0;
+ effIndex=getmaterial("effMedium","Refractive Index");
+ effIndexStart=1.7;
+ effIndexEnd=3.47; #3.47;
+ indexStep=0.01;
+ n_index=((effIndexEnd - effIndexStart)/indexStep) +1 ;
+ ?"n_width= "+num2str(n_width);
+ ?"n_index= "+num2str(n_index);
+ write("testfile.txt","n_width= "+num2str(n_width));
+ write("testfile.txt","n_index= "+num2str(n_index));
+ neff_mat=matrix(n_index,n_width);
+ effMaterialIndex=matrix(n_index,n_width);
+ newIndex=effIndexStart;
+ 
+ # TIPs for scripting for material NOT TO REMOVE FROM HERE
+ #?getmaterial("effMedium1"); 
+ #?getmaterial("effMedium1","type");
+ #?getmaterial("effMedium1","Refractive Index");
+ write("testfile.txt","------------------------");
+select("grating_coupler_2D_effMed_yIsWidth"); 
+w_original= get("target width"); 
+for (iw=1:n_width)
+{ # width sweep START
+    #?iw;
+    #?width_range(iw);
+    switchtolayout;
+    select("grating_coupler_2D_effMed_yIsWidth");
+    set("target width",width_range(iw));
+    for (ii=1:n_index)
+    { 
+        switchtolayout; 
+        #?newIndex;
+        setmaterial("effMedium","Refractive Index",newIndex);
+        select("grating_coupler_2D_effMed_yIsWidth");
+        #?get("duty cycle");
+        #set("duty cycle",DCswg);
+        Lplot= get("target length");
+        wplot= get("target width");
+        hplot= get("h total");
+        #?get("duty cycle");
+        ?"ii= "+num2str(ii);
+        ?"iw= "+num2str(iw); 
+        ?"width= "+num2str(width_range(iw));
+        write("testfile.txt","ii= "+num2str(ii));
+        write("testfile.txt","iw= "+num2str(iw));
+        write("testfile.txt","width= "+num2str(width_range(iw)));
+        run;
+        monitorName="full_profile_yIsWidth";
+        xData=getresult("full_profile_yIsWidth","x");
+        yData=getresult("full_profile_yIsWidth","y");
+        Ez=getresult("full_profile_yIsWidth","Ez");
+        ?PlotTitle="Field_2D_eff_yIsWidth_R0p01" + "_eff" + num2str(newIndex)+ "_w" + num2str(wplot*1e6) + "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6);
+        PlotName="Field_2D_eff_yIsWidth_R0p01" + "_eff" + num2str(newIndex)+ "_w" + num2str(wplot*1e6) + "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6) +".jpg";
+        plot(xData,real(Ez),"xData","Field");
+        setplot("title",PlotTitle);
+        setplot("x min",0);
+        setplot("x max",15e-6);
+        selectfigure(1);
+        exportfigure(PlotName);
+        monitorNameMode="mode_g_wg";
+        mode_neff=getresult(monitorNameMode,"neff");
+        value_mode_neff=real(mode_neff.neff);
+        effMaterialIndex(ii,iw)= newIndex;
+        neff_mat(ii,iw)= value_mode_neff;
+        ?"effMaterialIndex= "+num2str(effMaterialIndex(ii,iw));
+        ?"neff_mat= "+num2str(neff_mat(ii,iw));
+        write("testfile.txt","effMaterialIndex= "+num2str(effMaterialIndex(ii,iw)));
+        write("testfile.txt","neff_mat= "+num2str(neff_mat(ii,iw)));
+        write("testfile.txt","+++++++++++++++++++++++++");     
+        newIndex=newIndex+indexStep;
+        ##
+        ###?MatlabFileName="Ez_"+num2str(ii)+".mat";
+        ###matlabsave (MatlabFileName, Ez,x,y);
+        ###EzFileName(ii)=getresult("fullProfile","Ez");
+        } # index sweep END
+        ##?ii;
+        #ii=ii+1;
+        ##?newIndex=3.476;
+        ## Adding the last run for Si as the eff Medium
+        #switchtolayout;
+        #setmaterial("effMedium","Refractive Index",newIndex);
+        #run;
+        ## Get the E Field for the last run
+        #monitorName="full_profile_yIsWidth";
+        #xData=getresult("full_profile_yIsWidth","x");
+        #yData=getresult("full_profile_yIsWidth","y");
+        #Ez=getresult("full_profile_yIsWidth","Ez");
+        #?PlotTitle="Field_2D_eff_yIsWidth_0p01" + "_eff" + num2str(newIndex)+ "_w" + num2str(wplot*1e6) + "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6);
+        #PlotName="Field_2D_eff_yIsWidth_0p01" + "_eff" + num2str(newIndex)+ "_w" + num2str(wplot*1e6) + "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6) +".jpg";
+        #LastE=plot(xData,real(Ez),"xData","Field");
+        #setplot("title",PlotTitle);
+        #setplot("x min",0);
+        #setplot("x max",15e-6);
+        #selectfigure(LastE);
+        #exportfigure(PlotName);   
+      
+        ## Get the neff from mode expansion monitor for the last run
+        #mode_neff=getresult(monitorNameMode,"neff");
+        #value_mode_neff=real(mode_neff.neff);
+        #?effMaterialIndex(ii,iw)= newIndex;
+        #?neff_mat(ii,iw)= value_mode_neff;
+      
+        ?PlotTitleNeff="modeNeff_vs_MaterailIndex_modeExapansion_fdtd_yIsWidth_R0p01_" +  num2str(effIndexStart) + "_" + num2str(effIndexEnd)+ "_w" + num2str(wplot*1e6)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6);
+        PlotNameNeff="modeNeff_vs_MaterailIndex_modeExapansion_fdtd_yIsWidth_R0p01_" +  num2str(effIndexStart) + "_" + num2str(effIndexEnd)+ "_w" + num2str(wplot*1e6)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6) + ".jpg";
+        neff_mat_Name ="neff_mat_R0p01_" +  num2str(effIndexStart) + "_" + num2str(effIndexEnd)+ "_w" + num2str(wplot*1e6)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6) +".mat";
+        effMaterialIndex_Name="neffMaterialIndex_R0p01_" +  num2str(effIndexStart) + "_" + num2str(effIndexEnd)+ "_w" + num2str(wplot*1e6)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6) + ".mat";
+        hh=plot(effMaterialIndex(:,iw),neff_mat(:,iw));
+        setplot("title",PlotTitleNeff);
+        selectfigure(hh);
+        exportfigure(PlotNameNeff);
+        matlabsave (neff_mat_Name,neff_mat);
+        matlabsave (effMaterialIndex_Name,effMaterialIndex);
+        newIndex=effIndexStart;
+    } # width sweep END
+    switchtolayout;
+    setmaterial("effMedium","Refractive Index",effIndex);
+    
+    
+    
+    
+    
+    
+    
+    
+ ## ------------------------------------------------------------
+
+
+ #for (ii=1:n_index)
+ #{ # index sweep START
+     #switchtolayout;
+     ##?ii;
+     ##?indexStep*(ii-1);
+     ##?newIndex=newIndex+indexStep;
+     #?newIndex;
+     #setmaterial("effMedium","Refractive Index",newIndex);
+     
+     
+     
+     
+     #select("grating_coupler_2D_effMed_yIsWidth");
+     ##?get("duty cycle");
+     ##set("duty cycle",DCswg);
+     #Lplot= get("target length");
+     #wplot= get("target width");
+     #hplot= get("h total");
+     ##?get("duty cycle");
+     #run;
+     #monitorName="full_profile_yIsWidth";
+     #xData=getresult("full_profile_yIsWidth","x");
+     #yData=getresult("full_profile_yIsWidth","y");
+     #Ez=getresult("full_profile_yIsWidth","Ez");
+     #?PlotTitle="Field_2D_eff_yIsWidth_0p01" + "_eff" + num2str(newIndex)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6);
+     #PlotName="Field_2D_eff_yIsWidth_0p01" + "_eff" + num2str(newIndex)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6) +".jpg";
+     #plot(xData,real(Ez),"xData","Field");
+     #setplot("title",PlotTitle);
+     #setplot("x min",0);
+     #setplot("x max",15e-6);
+     #selectfigure(1);
+     #exportfigure(PlotName);
+     #monitorNameMode="mode_g_wg";
+     #mode_neff=getresult(monitorNameMode,"neff");
+     #value_mode_neff=real(mode_neff.neff);
+     #effMaterialIndex(ii)= newIndex;
+     #neff_mat(ii)= value_mode_neff;
+     #newIndex=newIndex+indexStep;
+     ###
+     ####?MatlabFileName="Ez_"+num2str(ii)+".mat";
+     ####matlabsave (MatlabFileName, Ez,x,y);
+     ####EzFileName(ii)=getresult("fullProfile","Ez");
+      #} # index sweep END
+      #?ii;
+      #ii=ii+1;
+      #newIndex=3.476;
+      ## Adding the last run for Si as the eff Medium
+      #switchtolayout;
+      #setmaterial("effMedium","Refractive Index",newIndex);
+      #run;
+      ## Get the E Field for the last run
+      #monitorName="full_profile_yIsWidth";
+      #xData=getresult("full_profile_yIsWidth","x");
+      #yData=getresult("full_profile_yIsWidth","y");
+      #Ez=getresult("full_profile_yIsWidth","Ez");
+      #?PlotTitle="Field_2D_eff_yIsWidth_0p01" + "_eff" + num2str(newIndex)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6);
+      #PlotName="Field_2D_eff_yIsWidth_0p01" + "_eff" + num2str(newIndex)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6) +".jpg";
+      #LastE=plot(xData,real(Ez),"xData","Field");
+      #setplot("title",PlotTitle);
+      #setplot("x min",0);
+      #setplot("x max",15e-6);
+      #selectfigure(LastE);
+      #exportfigure(PlotName);
+      
+      
+      
+      ## Get the neff from mode expansion monitor for the last run
+      #mode_neff=getresult(monitorNameMode,"neff");
+      #value_mode_neff=real(mode_neff.neff);
+      #effMaterialIndex(ii)= newIndex;
+      #neff_mat(ii)= value_mode_neff;
+      
+      #?PlotTitleNeff="modeNeff_vs_MaterailIndex_modeExapansion_fdtd_yIsWidth_0p01_" +  num2str(effIndexStart) + "_" + num2str(effIndexEnd)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6);
+      #PlotNameNeff="modeNeff_vs_MaterailIndex_modeExapansion_fdtd_yIsWidth_0p01_" +  num2str(effIndexStart) + "_" + num2str(effIndexEnd)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6) +".jpg";
+      #neff_mat_Name="neff_mat_0p01_" +  num2str(effIndexStart) + "_" + num2str(effIndexEnd)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6) +".mat";
+      #effMaterialIndex_Name="neffMaterialIndex_0p01_" +  num2str(effIndexStart) + "_" + num2str(effIndexEnd)+ "_h" + num2str(hplot*1e6)+ "_L" + num2str(Lplot*1e6)+ "_w" + num2str(wplot*1e6) + ".mat";
+      #hh=plot(effMaterialIndex,neff_mat);
+      #setplot("title",PlotTitleNeff);
+      #selectfigure(hh);
+      #exportfigure(PlotNameNeff);
+      #matlabsave (neff_mat_Name,neff_mat);
+      #matlabsave (effMaterialIndex_Name,effMaterialIndex);
+      #switchtolayout;
+      #setmaterial("effMedium","Refractive Index",effIndex);

@@ -1,0 +1,9 @@
+addfde;
+set("solver type","2D X normal");
+#set("x min",0);
+#set("x max",0);
+set("y min",0);
+set("y max",0.22e-6);
+set("z",0);
+set("z span",0.7e-6);
+findmodes;

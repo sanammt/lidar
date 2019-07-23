@@ -1,0 +1,21 @@
+logFilename="effMaterial_Index_widerSio2.txt";
+DataFilename="effMaterial_Index_widerSio2_Data.txt";
+select("wg");
+mat=get("material");
+write(logFilename,mat);
+
+# For Silicon
+?materialIndex=getindex(mat, 1.55e-6);
+# For my defined (n,k) material type
+#?getmaterial(mat,"Refractive Index");
+
+
+materiaIndexReal=real(materialIndex);
+write(logFilename,"material_index= "+num2str(materiaIndexReal));
+
+getdata("mode1");
+EffIndex=getdata("mode1","neff");
+?neff=real(EffIndex);
+write(logFilename,"Neff= "+num2str(neff));
+write(logFilename,"-------------------------------------------");
+write(DataFilename,num2str(materiaIndexReal) + " " +num2str(neff));

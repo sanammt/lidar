@@ -1,0 +1,20 @@
+ #clear;
+#m="above_higher_1.35";
+#getdata(m);
+#?getdata(m);
+#Ex  Ey  Ez  Hx  Hy  Hz  dimension  f  power
+#surface_normal  x  y  z  
+#fangle=farfieldangle(m);
+#f2d=farfield2d(m);
+
+ #clear;
+#m="above_higher";
+#f2d=farfield2d(m,1,2000);
+#f2d_1=farfield2d(m);
+#f2d_1=farfield2d(m,[1:5],2000);
+#f2d_full=farfield2d(m,[1:50],2000);
+
+clear;
+m="above_higher";
+fangle=farfieldangle(m);
+f2d_full=farfield2d(m,[1:26],2000);
