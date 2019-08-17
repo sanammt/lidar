@@ -3,6 +3,7 @@
 % material index
 close all;
 clear all;
+
 materail_neff= cell(50,50);
 materail_neff_mod= cell(50,50);
 
@@ -203,7 +204,7 @@ plot(dc_swg_v_w0p5_fitted_2,neff_fitted_w0p5_2,'^r',dc_swg_v_w0p5_fitted_2,mater
 legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_swg\_v)','sim neff (dc sweep sims)','effmaterial for sim neff (dc sweep sims)','fitted neff (input:given effMaterial Index)','given effMaterial Index')
 
 
-error_dc_swg=100*(abs(dc_swg_v_w0p5_fitted_2-dc_swg_v_w0p5)./dc_swg_v_w0p5)
+% error_dc_swg=100*(abs(dc_swg_v_w0p5_fitted_2-dc_swg_v_w0p5)./dc_swg_v_w0p5)
 
 % figure('name','fitted_mode_material_vs_dc_swg_v_w0p5');
 % plot(dc_swg_v_w0p5_fitted_2,neff_fitted_2,'r',dc_swg_v_w0p5_fitted_2,material_vs_dc_swg_w0p5,'b')
@@ -230,13 +231,74 @@ plot(dc_swg_v_w0p6,neff_swg_v_w0p6,'*r',dc_swg_v_w0p6,material_vs_dc_swg_w0p6,'*
 neff_fitted_w0p6_2=fit_mode_vs_material_w0p6(material_vs_dc_swg_w0p6);
 dc_swg_v_w0p6_fitted_2=fit_dc_swg_v_vs_mode_w0p6(neff_fitted_w0p6_2);
 plot(dc_swg_v_w0p6_fitted_2,neff_fitted_w0p6_2,'^r',dc_swg_v_w0p6_fitted_2,material_vs_dc_swg_w0p6,'^b')
-legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_swg\_v)','sim neff (dc sweep sims)','effmaterial for sim neff (dc sweep sims)','fitted neff (input:given effMaterial Index)','given effMaterial Index')
+% legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_swg\_v)','sim neff (dc sweep sims)','effmaterial for sim neff (dc sweep sims)','fitted neff (input:given effMaterial Index)','given effMaterial Index')
 
 
 % error_dc_swg_w0p5=100*(abs(dc_swg_v_w0p5_fitted_2-dc_swg_v_w0p5)./dc_swg_v_w0p5);
 % error_dc_swg_w0p6=100*(abs(dc_swg_v_w0p6_fitted_2-dc_swg_v_w0p6)./dc_swg_v_w0p6);
 
+%%%%% EXTRA DATA %%%%%
+extra_mat_neff=[2.5342 , 1.58445 ; 2.6224,1.65227 ; 2.6866,1.70555 ; 2.7738,1.7851 ; 2.8702,1.8808 ]
+extra_fitted_dc_swg_vs_neff=fit_dc_swg_v_vs_mode_w0p6(extra_mat_neff(:,2))
+extra_material_vs_neff=fit_material_vs_mode_w0p6(extra_mat_neff(:,2))
+extra_fitted_neff_vs_material=fit_mode_vs_material_w0p6(extra_material_vs_neff)
+%%%%%%%%%%%%%%%%%%%%%%
+plot(extra_fitted_dc_swg_vs_neff(1),extra_fitted_neff_vs_material(1,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+plot(extra_fitted_dc_swg_vs_neff(1),extra_material_vs_neff(1,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
 
+plot(extra_fitted_dc_swg_vs_neff(1),extra_mat_neff(1,1),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+plot(extra_fitted_dc_swg_vs_neff(1),extra_mat_neff(1,2),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
 
+%
+plot(extra_fitted_dc_swg_vs_neff(2),extra_fitted_neff_vs_material(2,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+plot(extra_fitted_dc_swg_vs_neff(2),extra_material_vs_neff(2,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+
+plot(extra_fitted_dc_swg_vs_neff(2),extra_mat_neff(2,1),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+plot(extra_fitted_dc_swg_vs_neff(2),extra_mat_neff(2,2),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+
+%
+plot(extra_fitted_dc_swg_vs_neff(3),extra_fitted_neff_vs_material(3,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+plot(extra_fitted_dc_swg_vs_neff(3),extra_material_vs_neff(3,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+
+plot(extra_fitted_dc_swg_vs_neff(3),extra_mat_neff(3,1),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+plot(extra_fitted_dc_swg_vs_neff(3),extra_mat_neff(3,2),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+
+%
+plot(extra_fitted_dc_swg_vs_neff(4),extra_fitted_neff_vs_material(4,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+plot(extra_fitted_dc_swg_vs_neff(4),extra_material_vs_neff(4,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+
+plot(extra_fitted_dc_swg_vs_neff(4),extra_mat_neff(4,1),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+plot(extra_fitted_dc_swg_vs_neff(4),extra_mat_neff(4,2),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+
+%
+plot(extra_fitted_dc_swg_vs_neff(5),extra_fitted_neff_vs_material(5,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+plot(extra_fitted_dc_swg_vs_neff(5),extra_material_vs_neff(5,1),'-o','MarkerEdgeColor','black','MarkerSize',5,'LineWidth',2)
+
+plot(extra_fitted_dc_swg_vs_neff(5),extra_mat_neff(5,1),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+plot(extra_fitted_dc_swg_vs_neff(5),extra_mat_neff(5,2),'-x','MarkerEdgeColor','green','MarkerSize',5,'LineWidth',1)
+
+%
+legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_swg\_v)','sim neff (dc sweep sims)','effmaterial for sim neff (dc sweep sims)','fitted neff (input:given effMaterial Index)','given effMaterial Index')
+%
+%
+%
+figure('name','extra');
+plot(material_vs_dc_swg_w0p6,neff_fitted_w0p6_2)
+hold on
+plot(extra_material_vs_neff(1),extra_fitted_neff_vs_material(1,1),'-x','MarkerEdgeColor','black','MarkerSize',10,'LineWidth',2)
+plot(extra_mat_neff(1,1),extra_mat_neff(1,2),'-p','MarkerEdgeColor','red','MarkerSize',10,'LineWidth',2)
+%
+plot(extra_material_vs_neff(2),extra_fitted_neff_vs_material(2,1),'-x','MarkerEdgeColor','black','MarkerSize',10,'LineWidth',2)
+plot(extra_mat_neff(2,1),extra_mat_neff(2,2),'-p','MarkerEdgeColor','red','MarkerSize',10,'LineWidth',2)
+%
+plot(extra_material_vs_neff(3),extra_fitted_neff_vs_material(3,1),'-x','MarkerEdgeColor','black','MarkerSize',10,'LineWidth',2)
+plot(extra_mat_neff(3,1),extra_mat_neff(3,2),'-p','MarkerEdgeColor','red','MarkerSize',10,'LineWidth',2)
+%
+plot(extra_material_vs_neff(4),extra_fitted_neff_vs_material(4,1),'-x','MarkerEdgeColor','black','MarkerSize',10,'LineWidth',2)
+plot(extra_mat_neff(4,1),extra_mat_neff(4,2),'-p','MarkerEdgeColor','red','MarkerSize',10,'LineWidth',2)
+%
+plot(extra_material_vs_neff(5),extra_fitted_neff_vs_material(5,1),'-x','MarkerEdgeColor','black','MarkerSize',10,'LineWidth',2)
+plot(extra_mat_neff(5,1),extra_mat_neff(5,2),'-p','MarkerEdgeColor','red','MarkerSize',10,'LineWidth',2)
+%
 
 
