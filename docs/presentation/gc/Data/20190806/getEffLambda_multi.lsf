@@ -1,3 +1,15 @@
+clear;
+wg_x_min=-0.175*1e-6:-0.025*1e-6:-0.75*1e-6;
+
+#for wg_x_min=-0.175*1e-6:-0.025*1e-6:-1*1e-6;
+for (wg_x_min=-0.175*1e-6:-0.025*1e-6:-0.85*1e-6){
+switchtolayout;
+select("wg");
+set("x min",wg_x_min);
+set("x max",-wg_x_min);
+#findmodes;
+run;
+
 
 monitorName="fullProfile_g";
 # xData in this example show the values of y (depth)
@@ -49,7 +61,7 @@ for (i=1:length(xData)){
 ## 19 is almost middle of the y, y has 24 values 
 ## and the peak is at 19= temp_alongz_id, came from the above code
 y_start=100;
-y_end=350;   # oiginal for highter material index 350;
+y_end=150; #350;   # oiginal for highter material index 350;
 pos_unSorted=findpeaks(real(E_val(1,temp_alongz_id,(y_start:y_end),1,1)),20);
 pos=sort(pos_unSorted);
 n_peak=0;
@@ -73,12 +85,40 @@ for (ip=1:length(pos)){
  
  
  
-logFilename="fdtd_effMaterial_Index.txt";
-DataFilename="fdtd_effMaterial_Index_Data.txt";
+logFilename="fdtd_effMaterial_Index_effMaterial2_multi.txt";
+DataFilename="fdtd_effMaterial_Index_effMaterial2_multi_Data.txt";
 
+# get wg physical info
 select("wg");
 mat=get("material");
+?wg_width=abs(get("x max")-get("x min"))*1e6;
+?wg_depth=abs(get("y max")-get("y min"))*1e6;
+
+# get sio2 physical info
+select("sio2");
+mat_sio2=get("material");
+?sio2_width=abs(get("x max")-get("x min"))*1e6;
+?sio2_depth=abs(get("y max")-get("y min"))*1e6;
+
+# get FDTD physical info
+select("FDTD");
+?FDTD_width=abs(get("x max")-get("x min"))*1e6;
+?FDTD_top=get("y max")*1e6;
+?FDTD_bottom=get("y min")*1e6;
+
 write(logFilename,mat);
+write(logFilename,mat_sio2);
+write(logFilename,"wg info");
+write(logFilename,"wg_width= "+num2str(wg_width));
+write(logFilename,"wg_depth= "+num2str(wg_depth));
+write(logFilename,"sio2 info");
+write(logFilename,"sio2_width= "+num2str(wg_width));
+write(logFilename,"sio2_depth= "+num2str(wg_depth));
+write(logFilename,"FDTD info");
+write(logFilename,"FDTD_width= "+num2str(FDTD_width));
+write(logFilename,"FDTD_top= "+num2str(FDTD_top));
+write(logFilename,"FDTD_bottom= "+num2str(FDTD_bottom));
+
 
 modeMonitorName="monitor";
 neff_modeMonitor_temp=getresult(modeMonitorName,"neff");
@@ -93,8 +133,8 @@ write(logFilename,"material_index= "+num2str(materiaIndexReal));
 write(logFilename,"Neff= "+num2str(neff));
 write(logFilename,"Neff_modeMonitor= "+num2str(neff_modeMonitor));
 write(logFilename,"-------------------------------------------");
-write(DataFilename,num2str(materiaIndexReal) + " " +num2str(neff_modeMonitor) + " " +num2str(neff));
-
+write(DataFilename,num2str(materiaIndexReal) + " " +num2str(neff_modeMonitor) + " " +num2str(neff)  + " " +num2str(wg_width));
+}
 
 
  

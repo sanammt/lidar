@@ -1,0 +1,15 @@
+close all;
+clear all;
+fdtddata=load("fdtd_effMaterial_Index_Data_MOD.txt");
+modedata=load("effMaterial_Index_DataFile_MOD.txt");
+materialIndex=fdtddata(:,1);
+neff_modeMonitor_fdtd=fdtddata(:,2);
+neff_3d_fdtd=fdtddata(:,3);
+neff_modeSolution=modedata(:,2);
+plot(materialIndex,neff_modeSolution,'r',materialIndex,neff_modeMonitor_fdtd,'b',materialIndex,neff_3d_fdtd','*g');
+legend('Mode Solution','Mode Monitor in FDTD','3D FDTD','location','northwest');
+title('ModeIndex\_vs\_MaterialIndex\_fixedWidth');
+xlabel('Material Index');
+ylabel('Neff, Propagation Mode Index');
+dims={'wg width=0.5 micron','wg depth=0.22 micron', '' ,'sio2 width=1 micron','sio2 depth=1.5 micron'};
+text(materialIndex(end-1),neff_3d_fdtd(end-3), dims);

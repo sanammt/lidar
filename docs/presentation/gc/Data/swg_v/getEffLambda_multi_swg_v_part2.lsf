@@ -1,0 +1,5 @@
+ # must defined n_valid_peaks from the E_z plot e.g.  n_valid_peaks=7;
+ lam=1.55;
+ ?lam_eff=n_times_lam_eff/n_valid_peaks; 
+ ?neff=lam/lam_eff;
+ write(DataFilename,num2str(dc_swg)  + " " +num2str(neff)  + " " +num2str(wg_width)  + " " +num2str(pitch_swg));
