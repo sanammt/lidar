@@ -1,0 +1,217 @@
+clear;
+closeall;
+for (dc_swg=0.3:0.05:1){
+
+?target_width=0.7*1e-6;
+?dc_swg;
+
+switchtolayout;
+select("grating_coupler_2D_h_zIsWidth");
+set("target width",target_width);
+set("duty cycle",dc_swg);
+##findmodes;
+run;
+
+
+monitorName="fullProfile_g";
+# xData in this example show the values of y (depth)
+# xData in this example show the values of z (propagation direction)
+xData=getresult(monitorName,"x");
+yData=getresult(monitorName,"y");
+
+
+
+E=getresult(monitorName,"E");  
+E_val=E.E;
+
+H=getresult(monitorName,"H");
+H_val=H.H;
+
+max_Ez_alongX=matrix(length(xData),1);
+max_Ez_alongY_1=matrix(length(yData),1);
+max_Ez_alongY_2=matrix(length(yData),1);
+temp_alongx=0;
+temp_alongy_1=0;
+temp_alongy_2=0;
+temp_alongx_id=0;
+temp_alongy_id_1=0;
+temp_alongy_id_2=0;
+for (i=1:length(yData)){
+    max_Ez_alongY_1(i)=max(real(E_val(200:450,i,1,1,3)));
+    if (max_Ez_alongY_1(i) > temp_alongy_1){
+        temp_alongy_1 = max_Ez_alongY_1(i);
+        temp_alongy_id_1 = i;
+        }
+    temp_alongy_1;
+    temp_alongy_id_1;
+    max_Ez_alongY_2(i)=max(real(E_val(400:450,i,1,1,3)));
+    if (max_Ez_alongY_2(i) > temp_alongy_2){
+        temp_alongy_2 = max_Ez_alongY_2(i);
+        temp_alongy_id_2 = i;
+        }
+    }
+    temp_alongy_2;
+    temp_alongy_id_2;    
+##### find max along y for a particular z    
+#for (i=1:length(yData)){
+    #?max_Ex_alongY(i)=max(real(E_val(1,:,i,1,1)));
+    #if (max_Ex_alongY(i) > temp_alongy){
+        #temp_alongy = max_Ex_alongY(i);
+        #temp_alongy_id = i;
+        #}
+    #}
+    #?temp_alongy;
+    #?temp_alongy_id;   
+ ?temp_alongy_id_1; 
+ ?temp_alongy_id_2; 
+############
+## we want to find the extrams between z1 and z2 points
+## the values are random and I just peakeda approximate range of 5-7 microns
+## by try and error 
+## z1 =yData(170,1);
+## z2 =yData(230,1); 
+## we need to find multiple extremas I used 5 for example, chosen from the graph
+## 19 is almost middle of the y, y has 24 values 
+## and the peak is at 19= temp_alongz_id, came from the above code
+###############################################################################
+x_start=200;
+x_end=450;
+pos_unSorted=findpeaks(real(E_val((x_start:x_end),temp_alongy_id_1,1,1,3)),10);
+pos=sort(pos_unSorted);
+n_peak=0;
+for (ip=1:length(pos)){
+    #?ip;
+    #?pos(ip);
+    if (pos(ip)>1){
+        n_peak=n_peak+1;
+        }
+    }  
+?n_peak; 
+?pos_start=x_start+(pos(length(pos)-n_peak+1))-1;
+?pos_end=x_start+pos(length(pos))-1; 
+ 
+?x_start=xData(pos_start);
+?x_end=xData(pos_end);
+?lambda_eff=(x_end-x_start)/(n_peak-1);
+?neff=(1.55*1e-6)/lambda_eff;
+
+
+
+
+
+
+
+####>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#x_start_1=200;
+#x_end_1=250;
+#x_start_2=400;
+#x_end_2=450;
+#pos_unSorted_1=findpeaks(real(E_val((x_start_1:x_end_1),temp_alongy_id_1,1,1,3)),1);
+#pos_1=sort(pos_unSorted_1);
+#n_peak_1=0;
+#for (ip=1:length(pos_1)){
+    #?ip;
+    #?pos(ip);
+    #if (pos_1(ip)>1){
+        #n_peak_1=n_peak_1+1;
+        #}
+    #}  
+#n_peak_1; 
+#pos_unSorted_2=findpeaks(real(E_val((x_start_2:x_end_2),temp_alongy_id_2,1,1,3)),1);
+#pos_2=sort(pos_unSorted_2);
+#n_peak_2=0;
+#for (ip=1:length(pos_2)){
+    #?ip;
+    #?pos(ip);
+    #if (pos_2(ip)>1){
+        #n_peak_2=n_peak_2+1;
+        #}
+    #}  
+#n_peak_2;
+#?x_1=xData(x_start_1+pos_1-1,1)*1e6;
+#?x_2=xData(x_start_2+pos_2-1,1)*1e6;
+#n_times_lam_eff=(xData(x_start_2+pos_2-1,1)-xData(x_start_1+pos_1-1,1))*1e6;
+####>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+
+
+
+
+ #?pos_start=x_start+(pos(length(pos)-n_peak+1))-1;
+ #?pos_end=x_start+pos(length(pos))-1; 
+ 
+ #?x_start=xData(pos_start);
+ #?x_end=xData(pos_end);
+ #?lambda_eff=(x_end-x_start)/(n_peak-1);
+ #?neff=(1.55*1e-6)/lambda_eff;
+ #plot(yData((y_start:y_end),1),(real(E_val(1,temp_alongz_id,(y_start:y_end),1,1))));
+ 
+ 
+ 
+#logFilename="fdtd_mode_dc_swg_multi.txt";
+DataFilename="fdtd_mode_dc_swg_h_multi_w0p7_Data.txt";
+
+## get wg physical info
+select("grating_coupler_2D_h_zIsWidth");
+?dc_swg=get("duty cycle");
+?pitch_swg=get("pitch")*1e6;
+select("grating_coupler_2D_h_zIsWidth");
+?wg_width=get("target width")*1e6;
+#?wg_depth=abs(get("y max")-get("y min"))*1e6;
+
+# get sio2 physical info
+#select("grating_coupler_2D_v_zIsWidth::sio2");
+#mat_sio2=get("material");
+#?sio2_width=abs(get("z max")-get("z min"))*1e6;
+#?sio2_depth=abs(get("y max")-get("y min"))*1e6;
+#?wg_sio2_length=abs(get("x max")-get("x min"))*1e6;
+
+# get FDTD physical info
+select("FDTD");
+#?FDTD_width=abs(get("x max")-get("x min"))*1e6;
+#?FDTD_top=get("y max")*1e6;
+#?FDTD_bottom=get("y min")*1e6;
+
+#write(logFilename,mat);
+#write(logFilename,mat_sio2);
+#write(logFilename,"wg info");
+#write(logFilename,"wg_width= "+num2str(wg_width));
+#write(logFilename,"wg_depth= "+num2str(wg_depth));
+#write(logFilename,"wg_length= "+num2str(wg_sio2_length));
+#write(logFilename,"sio2 info");
+#write(logFilename,"sio2_width= "+num2str(wg_width));
+#write(logFilename,"sio2_depth= "+num2str(wg_depth));
+#write(logFilename,"FDTD info");
+#write(logFilename,"FDTD_width= "+num2str(FDTD_width));
+#write(logFilename,"FDTD_top= "+num2str(FDTD_top));
+#write(logFilename,"FDTD_bottom= "+num2str(FDTD_bottom));
+
+
+modeMonitorName="mode_swg_h";
+neff_modeMonitor_temp=getresult(modeMonitorName,"neff");
+neff_modeMonitor_comp=neff_modeMonitor_temp.neff;
+?neff_modeMonitor=real(neff_modeMonitor_comp);
+
+
+
+write(DataFilename,num2str(dc_swg)  + " " +num2str(neff_modeMonitor)  + " " +num2str(neff)  + " " +num2str(wg_width)  + " " +num2str(pitch_swg));
+
+
+
+# For Silicon
+#materialIndex=getindex(mat, 1.55e-6);
+
+#?materiaIndexReal=real(materialIndex);
+#write(logFilename,"material_index= "+num2str(materiaIndexReal));
+
+#write(logFilename,"Neff= "+num2str(neff));
+#write(logFilename,"Neff_modeMonitor= "+num2str(neff_modeMonitor));
+#write(logFilename,"-------------------------------------------");
+#write(DataFilename,num2str(neff)  + " " +num2str(wg_width));
+}
+
+
+ 
+    

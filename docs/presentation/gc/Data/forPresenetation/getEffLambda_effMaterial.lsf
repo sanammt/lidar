@@ -1,0 +1,101 @@
+
+monitorName="fullProfile_g";
+# xData in this example show the values of y (depth)
+# xData in this example show the values of z (propagation direction)
+xData=getresult(monitorName,"y");
+yData=getresult(monitorName,"z");
+
+
+
+E=getresult(monitorName,"E");  
+E_val=E.E;
+
+H=getresult(monitorName,"H");
+H_val=H.H;
+
+max_Ex_alongZ=matrix(length(xData),1);
+max_Ex_alongY=matrix(length(yData),1);
+temp_alongz=0;
+temp_alongy=0;
+temp_alongz_id=0;
+temp_alongy_id=0;
+for (i=1:length(xData)){
+    max_Ex_alongZ(i)=max(real(E_val(1,i,:,1,1)));
+    if (max_Ex_alongZ(i) > temp_alongz){
+        temp_alongz = max_Ex_alongZ(i);
+        temp_alongz_id = i;
+        }
+    }
+    temp_alongz;
+    ?temp_alongz_id;
+##### find max along y for a particular z    
+#for (i=1:length(yData)){
+    #?max_Ex_alongY(i)=max(real(E_val(1,:,i,1,1)));
+    #if (max_Ex_alongY(i) > temp_alongy){
+        #temp_alongy = max_Ex_alongY(i);
+        #temp_alongy_id = i;
+        #}
+    #}
+    #?temp_alongy;
+    #?temp_alongy_id;   
+
+############
+## we want to find the extrams between z1 and z2 points
+## the values are random and I just peakeda approximate range of 5-7 microns
+## by try and error 
+## z1 =yData(170,1);
+## z2 =yData(230,1); 
+## we need to find multiple extremas I used 5 for example, chosen from the graph
+## 19 is almost middle of the y, y has 24 values 
+## and the peak is at 19= temp_alongz_id, came from the above code
+y_start=100;
+y_end=350;   # oiginal for highter material index 350;
+pos_unSorted=findpeaks(real(E_val(1,temp_alongz_id,(y_start:y_end),1,1)),20);
+pos=sort(pos_unSorted);
+n_peak=0;
+for (ip=1:length(pos)){
+    #?ip;
+    #?pos(ip);
+    if (pos(ip)>1){
+        n_peak=n_peak+1;
+        }
+    }  
+ ?n_peak; 
+ 
+ ?pos_start=y_start+(pos(length(pos)-n_peak+1))-1;
+ ?pos_end=y_start+pos(length(pos))-1; 
+ 
+ ?z_start=yData(pos_start);
+ ?z_end=yData(pos_end);
+ lambda_eff=(z_end-z_start)/(n_peak-1);
+ ?neff=(1.55*1e-6)/lambda_eff;
+ plot(yData((y_start:y_end),1),(real(E_val(1,temp_alongz_id,(y_start:y_end),1,1))));
+ 
+ 
+ 
+logFilename="extra_fdtd_effMaterial_Index_multi.txt";
+DataFilename="extra_fdtd_effMaterial_Index_multi_Data.txt";
+
+select("wg");
+mat=get("material");
+write(logFilename,mat);
+
+modeMonitorName="monitor";
+neff_modeMonitor_temp=getresult(modeMonitorName,"neff");
+neff_modeMonitor_comp=neff_modeMonitor_temp.neff;
+?neff_modeMonitor=real(neff_modeMonitor_comp);
+# For Silicon
+materialIndex=getindex(mat, 1.55e-6);
+
+?materiaIndexReal=real(materialIndex);
+write(logFilename,"material_index= "+num2str(materiaIndexReal));
+
+write(logFilename,"Neff= "+num2str(neff));
+write(logFilename,"Neff_modeMonitor= "+num2str(neff_modeMonitor));
+write(logFilename,"-------------------------------------------");
+write(DataFilename,num2str(materiaIndexReal) + " " +num2str(neff_modeMonitor) + " " +num2str(neff));
+
+
+
+ 
+    

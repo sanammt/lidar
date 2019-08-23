@@ -1,0 +1,61 @@
+logFilename="effMaterial_Index_widerSio2_effMaterial5_multi.txt";
+DataFilename="effMaterial_Index_widerSio2_effMaterial5_multi_Data.txt";
+wg_x_min=-0.175*1e-6:-0.025*1e-6:-0.75*1e-6;
+
+#for wg_x_min=-0.175*1e-6:-0.025*1e-6:-0.75*1e-6;
+for (wg_x_min=-0.175*1e-6:-0.025*1e-6:-1*1e-6){
+switchtolayout;
+select("wg");
+set("x min",wg_x_min);
+set("x max",-wg_x_min);
+findmodes;
+#run;
+
+# get wg physical info
+select("wg");
+mat=get("material");
+?wg_width=abs(get("x max")-get("x min"))*1e6;
+?wg_depth=abs(get("y max")-get("y min"))*1e6;
+
+# get sio2 physical info
+select("sio2");
+mat_sio2=get("material");
+?sio2_width=abs(get("x max")-get("x min"))*1e6;
+?sio2_depth=abs(get("y max")-get("y min"))*1e6;
+
+# get FDE physical info
+select("FDE");
+?FDE_width=abs(get("x max")-get("x min"))*1e6;
+?FDE_top=get("y max")*1e6;
+?FDE_bottom=get("y min")*1e6;
+
+write(logFilename,mat);
+write(logFilename,mat_sio2);
+write(logFilename,"wg info");
+write(logFilename,"wg_width= "+num2str(wg_width));
+write(logFilename,"wg_depth= "+num2str(wg_depth));
+write(logFilename,"sio2 info");
+write(logFilename,"sio2_width= "+num2str(wg_width));
+write(logFilename,"sio2_depth= "+num2str(wg_depth));
+write(logFilename,"FDE info");
+write(logFilename,"FDE_width= "+num2str(FDE_width));
+write(logFilename,"FDE_top= "+num2str(FDE_top));
+write(logFilename,"FDE_bottom= "+num2str(FDE_bottom));
+
+
+# For Silicon
+?materialIndex=getindex(mat, 1.55e-6);
+# For my defined (n,k) material type
+#?getmaterial(mat,"Refractive Index");
+
+
+materiaIndexReal=real(materialIndex);
+write(logFilename,"material_index= "+num2str(materiaIndexReal));
+
+getdata("mode1");
+EffIndex=getdata("mode1","neff");
+?neff=real(EffIndex);
+write(logFilename,"Neff= "+num2str(neff));
+write(logFilename,"-------------------------------------------");
+write(DataFilename,num2str(materiaIndexReal) + " " +num2str(neff)+ " " +num2str(wg_width));
+}
