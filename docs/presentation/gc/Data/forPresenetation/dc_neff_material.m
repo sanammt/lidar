@@ -120,41 +120,35 @@ end
 %n_swg_h_w0p5=9;
 fit_mode_vs_dc_swg_h_w0p5=fit(swg_h_data_w0p5(:,1),swg_h_data_w0p5(:,3),'poly8'); % To get fitted neff for given dc swg_h
 %fit_dc_swg_h_vs_mode_w0p5=fit(swg_h_data_w0p5(:,3),swg_h_data_w0p5(:,1),'poly4'); % To get fitted dc swg_h for given neff
-xdata=swg_h_data_w0p5(:,3);
-ydata=swg_h_data_w0p5(:,1);
+xdata_swg_h_w0p5=swg_h_data_w0p5(:,3);
+ydata_swg_h_w0p5=swg_h_data_w0p5(:,1);
 
-fit_dc_swg_h_vs_mode_w0p5 = @(b,xdata) b(1).*exp(b(2).*xdata)+b(3);                                     % Objective Function
-B = fminsearch(@(b) norm(ydata - fit_dc_swg_h_vs_mode_w0p5(b,xdata)), [-200; -1; 100])  
-
-
-figure
-plot(xdata, ydata, 'pg')
-hold on
-plot(xdata, fit_dc_swg_h_vs_mode_w0p5(B,xdata), '-r')
-hold off
-grid
-xlabel('x')
-ylabel('f(x)')
-text(27, 105, sprintf('f(x) = %.1f\\cdote^{%.3f\\cdotx}%+.1f', B))
+fit_dc_swg_h_vs_mode_w0p5 = @(b,xdata_swg_h_w0p5) b(1).*exp(b(2).*xdata_swg_h_w0p5)+b(3);  % Objective Function
+B1 = fminsearch(@(b) norm(ydata_swg_h_w0p5 - fit_dc_swg_h_vs_mode_w0p5(b,xdata_swg_h_w0p5)), [-200; -1; 100]);  
 
 
 figure('name','dc_swg_h_vs_mode_w0p5_sim_fitted');
 plot(neff_swg_h_w0p5(:),dc_swg_h_w0p5(:));
 hold on
-plot(xdata, fit_dc_swg_h_vs_mode_w0p5(B,xdata), '-g')
-plot(swg_h_data_w0p5(:,3),fit_dc_swg_h_vs_mode_w0p5(B,swg_h_data_w0p5(:,3)));
-plot(1.8680,fit_dc_swg_h_vs_mode_w0p5(B,1.8680),'*r');
-plot(2,fit_dc_swg_h_vs_mode_w0p5(B,2),'*r');
-plot(2.13,fit_dc_swg_h_vs_mode_w0p5(B,2.13),'*r');
-plot(2.13,fit_dc_swg_h_vs_mode_w0p5(B,2.13),'*g');
-plot(1.8680,fit_dc_swg_h_vs_mode_w0p5(B,1.8680),'*g');
+plot(swg_h_data_w0p5(:,3),fit_dc_swg_h_vs_mode_w0p5(B1,swg_h_data_w0p5(:,3)));
+plot(1.8680,fit_dc_swg_h_vs_mode_w0p5(B1,1.8680),'*g');
+plot(2,fit_dc_swg_h_vs_mode_w0p5(B1,2),'*g');
+plot(2.13,fit_dc_swg_h_vs_mode_w0p5(B1,2.13),'*g');
+plot(2.13,fit_dc_swg_h_vs_mode_w0p5(B1,2.13),'*g');
+plot(1.8680,fit_dc_swg_h_vs_mode_w0p5(B1,1.8680),'*g');
+legend('sim','fitted')
+title('dc\_swg\_h\_vs\_mode\_w0p5\_sim\_fitted');
+xlabel('Neff(mode index)');
+ylabel('swg duty cycle, sim and fitted');
+dims={'wg width=0.5 micron'};
+text(0.5,3, dims);
 
 
 figure('name','mode_vs_dc_swg_h_w0p5_sim_fitted');
 plot(dc_swg_h_w0p5(:),neff_swg_h_w0p5(:));
 hold on
 plot(dc_swg_h_w0p5(:),fit_mode_vs_dc_swg_h_w0p5(dc_swg_h_w0p5(:)))
-plot(fit_dc_swg_h_vs_mode_w0p5(B,1.8680),1.8680,'*r');
+plot(fit_dc_swg_h_vs_mode_w0p5(B1,1.8680),1.8680,'*g');
 legend('sim','fitted')
 title('mode\_vs\_dc\_swg\_v\_w0p5\_sim\_fitted');
 xlabel('swg duty cycle');
@@ -165,13 +159,29 @@ text(0.5,3, dims);
 % for dc_swg_h=0.65 ==> start propagating , neff > n_cladding , SWG_H
 %n_swg_h_w0p6=8;
 fit_mode_vs_dc_swg_h_w0p6=fit(swg_h_data_w0p6(:,1),swg_h_data_w0p6(:,3),'poly6'); % To get fitted neff for given dc swg_h
-fit_dc_swg_h_vs_mode_w0p6=fit(swg_h_data_w0p6(:,3),swg_h_data_w0p6(:,1),'poly4'); % To get fitted dc swg_h for given neff
+%fit_dc_swg_h_vs_mode_w0p6=fit(swg_h_data_w0p6(:,3),swg_h_data_w0p6(:,1),'poly4'); % To get fitted dc swg_h for given neff
+xdata_swg_h_w0p6=swg_h_data_w0p6(:,3);
+ydata_swg_h_w0p6=swg_h_data_w0p6(:,1);
 
+fit_dc_swg_h_vs_mode_w0p6 = @(b,xdata_swg_h_w0p6) b(1).*exp(b(2).*xdata_swg_h_w0p6)+b(3);  % Objective Function
+B2 = fminsearch(@(b) norm(ydata_swg_h_w0p6 - fit_dc_swg_h_vs_mode_w0p6(b,xdata_swg_h_w0p6)), [-200; -1; 100]);  
 
 figure('name','dc_swg_h_vs_mode_w0p6_sim_fitted');
 plot(neff_swg_h_w0p6(:),dc_swg_h_w0p6(:));
 hold on
-plot(swg_h_data_w0p6(:,3),fit_dc_swg_h_vs_mode_w0p6(swg_h_data_w0p6(:,3)));
+plot(swg_h_data_w0p6(:,3),fit_dc_swg_h_vs_mode_w0p6(B2,swg_h_data_w0p6(:,3)));
+plot(1.8680,fit_dc_swg_h_vs_mode_w0p6(B2,1.8680),'*g');
+plot(2,fit_dc_swg_h_vs_mode_w0p6(B2,2),'*g');
+plot(2.13,fit_dc_swg_h_vs_mode_w0p6(B2,2.13),'*g');
+plot(2.13,fit_dc_swg_h_vs_mode_w0p6(B2,2.13),'*g');
+plot(1.8680,fit_dc_swg_h_vs_mode_w0p6(B2,1.8680),'*g');
+legend('sim','fitted')
+title('dc\_swg\_h\_vs\_mode\_w0p6\_sim\_fitted');
+xlabel('Neff(mode index)');
+ylabel('swg duty cycle, sim and fitted');
+dims={'wg width=0.6 micron'};
+text(0.5,3, dims);
+
 
 figure('name','mode_vs_dc_swg_h_w0p6_sim_fitted');
 plot(dc_swg_h_w0p6(:),neff_swg_h_w0p6(:));
@@ -187,7 +197,30 @@ text(0.5,3, dims);
 % for dc_swg_h=0.6 ==> start propagating , neff > n_cladding , SWG_H
 %n_swg_h_w0p7=7;
 fit_mode_vs_dc_swg_h_w0p7=fit(swg_h_data_w0p7(:,1),swg_h_data_w0p7(:,2),'poly6'); % To get fitted neff for given dc swg_h
-fit_dc_swg_h_vs_mode_w0p7=fit(swg_h_data_w0p7(:,2),swg_h_data_w0p7(:,1),'poly6'); % To get fitted dc swg_h for given neff
+%fit_dc_swg_h_vs_mode_w0p7=fit(swg_h_data_w0p7(:,2),swg_h_data_w0p7(:,1),'poly6'); % To get fitted dc swg_h for given neff
+xdata_swg_h_w0p7=swg_h_data_w0p7(:,3);
+ydata_swg_h_w0p7=swg_h_data_w0p7(:,1);
+
+fit_dc_swg_h_vs_mode_w0p7 = @(b,xdata_swg_h_w0p7) b(1).*exp(b(2).*xdata_swg_h_w0p7)+b(3);  % Objective Function
+B3 = fminsearch(@(b) norm(ydata_swg_h_w0p7 - fit_dc_swg_h_vs_mode_w0p7(b,xdata_swg_h_w0p7)), [-200; -1; 100]);  
+
+figure('name','dc_swg_h_vs_mode_w0p7_sim_fitted');
+plot(neff_swg_h_w0p7(:),dc_swg_h_w0p7(:));
+hold on
+plot(swg_h_data_w0p7(:,3),fit_dc_swg_h_vs_mode_w0p7(B3,swg_h_data_w0p7(:,3)));
+plot(1.8680,fit_dc_swg_h_vs_mode_w0p7(B3,1.8680),'*g');
+plot(2,fit_dc_swg_h_vs_mode_w0p7(B3,2),'*g');
+plot(2.13,fit_dc_swg_h_vs_mode_w0p7(B3,2.13),'*g');
+plot(2.13,fit_dc_swg_h_vs_mode_w0p7(B3,2.13),'*g');
+plot(1.8680,fit_dc_swg_h_vs_mode_w0p7(B3,1.8680),'*g');
+legend('sim','fitted')
+title('dc\_swg\_h\_vs\_mode\_w0p7\_sim\_fitted');
+xlabel('Neff(mode index)');
+ylabel('swg duty cycle, sim and fitted');
+dims={'wg width=0.6 micron'};
+text(0.5,3, dims);
+
+
 figure('name','mode_vs_dc_swg_h_w0p7_sim_fitted');
 plot(dc_swg_h_w0p7(:),neff_swg_h_w0p7(:));
 hold on
@@ -207,6 +240,18 @@ text(0.5,3, dims);
 % for w=0.5 ==> id=2 SWG_V
 fit_mode_vs_dc_swg_v_w0p5=fit(swg_v_data_w0p5(:,1),swg_v_data_w0p5(:,2),'poly6'); % To get fitted neff for given dc swg_v
 fit_dc_swg_v_vs_mode_w0p5=fit(swg_v_data_w0p5(:,2),swg_v_data_w0p5(:,1),'poly6'); % To get fitted dc swg_v for given neff
+
+figure('name','dc_swg_v_vs_mode_w0p5_sim_fitted');
+plot(neff_swg_v_w0p5,dc_swg_v_w0p5);
+hold on
+plot(fit_mode_vs_dc_swg_v_w0p5(dc_swg_v_w0p5),dc_swg_v_w0p5)
+legend('sim','fitted')
+title('dc\_swg\_v\_vs\_mode\_w0p5\_sim\_fitted');
+xlabel('Neff(mode index)');
+ylabel('swg duty cycle, sim and fitted');
+dims={'wg width=0.5 micron'};
+text(0.5,3, dims);
+
 figure('name','mode_vs_dc_swg_v_w0p5_sim_fitted');
 plot(dc_swg_v_w0p5,neff_swg_v_w0p5);
 hold on
@@ -221,6 +266,18 @@ text(0.5,3, dims);
 % for w=0.6 ==> id=4 SWG_V
 fit_mode_vs_dc_swg_v_w0p6=fit(swg_v_data_w0p6(:,1),swg_v_data_w0p6(:,2),'poly6'); % To get fitted neff for given dc swg_v
 fit_dc_swg_v_vs_mode_w0p6=fit(swg_v_data_w0p6(:,2),swg_v_data_w0p6(:,1),'poly6'); % To get fitted dc swg_v for given neff
+
+figure('name','dc_swg_v_vs_mode_w0p6_sim_fitted');
+plot(neff_swg_v_w0p6,dc_swg_v_w0p6);
+hold on
+plot(fit_mode_vs_dc_swg_v_w0p6(dc_swg_v_w0p6),dc_swg_v_w0p6)
+legend('sim','fitted')
+title('dc\_swg\_v\_vs\_mode\_w0p6\_sim\_fitted');
+xlabel('Neff(mode index)');
+ylabel('swg duty cycle, sim and fitted');
+dims={'wg width=0.5 micron'};
+text(0.5,3, dims);
+
 figure('name','mode_vs_dc_swg_v_w0p6_sim_fitted');
 plot(dc_swg_v_w0p6,neff_swg_v_w0p6);
 hold on
@@ -239,8 +296,18 @@ w_f_w0p5=w_mod(2);
 f_w0p5=materail_neff_mod{2};  
 fit_mode_vs_material_w0p5=fit(f_w0p5(:,1),f_w0p5(:,2),'linearinterp'); % To get fitted neff for given effMaterial Index
 fit_material_vs_mode_w0p5=fit(f_w0p5(:,2),f_w0p5(:,1),'linearinterp'); % To get fitted effMaterial Index for given neff 
+
+figure('name','material_vs_neff_sim_w0p5');
+plot(f_w0p5(:,2),f_w0p5(:,1),'r',f_w0p5(:,2),fit_material_vs_mode_w0p5(f_w0p5(:,2)),'*b');
+title('MaterialIndex\_ModeIndex\_w0p5\_sims')
+xlabel('Mode Index');
+ylabel('Material Index');
+dims={'wg width=0.5 micron'};
+text(0.5,3, dims);
+
+
 figure('name','neff_vs_material_sim_w0p5');
-plot(f_w0p5(:,1),f_w0p5(:,2));
+plot(f_w0p5(:,1),f_w0p5(:,2),'r',f_w0p5(:,1),fit_mode_vs_material_w0p5(f_w0p5(:,1)),'*b');
 title('ModeIndex\_MaterialIndex\_w0p5\_sims');
 xlabel('Material Index');
 ylabel('Mode Index');
@@ -253,8 +320,17 @@ w_f_w0p6=w_mod(4);
 f_w0p6=materail_neff_mod{4}; % simulated data
 fit_mode_vs_material_w0p6=fit(f_w0p6(:,1),f_w0p6(:,2),'linearinterp'); % To get fitted neff for given effMaterial Index
 fit_material_vs_mode_w0p6=fit(f_w0p6(:,2),f_w0p6(:,1),'linearinterp'); % To get fitted effMaterial Index for given neff 
+
+figure('name','material_vs_neff_sim_w0p6');
+plot(f_w0p6(:,2),f_w0p6(:,1),'r',f_w0p6(:,2),fit_material_vs_mode_w0p6(f_w0p6(:,2)),'*b');
+title('MaterialIndex\_ModeIndex\_w0p6\_sims');
+xlabel('Mode Index');
+ylabel('Material Index');
+dims={'wg width=0.6 micron'};
+text(0.5,3, dims);
+
 figure('name','neff_vs_material_sim_w0p6');
-plot(f_w0p6(:,1),f_w0p6(:,2));
+plot(f_w0p6(:,1),f_w0p6(:,2),'r',f_w0p6(:,1),fit_mode_vs_material_w0p6(f_w0p6(:,1)),'*b');
 title('ModeIndex\_MaterialIndex\_w0p6\_sims');
 xlabel('Material Index');
 ylabel('Mode Index');
@@ -267,11 +343,23 @@ text(0.5,3, dims);
 % which means for given dc_swg we can calculated the respective effMaterialIndex (for a fixed defined width)
 % neff_swg_v_w0p5 is the simulated data for dc_swg sweep
 % Hybrid mode: mix of simulation and curve fitting
-material_vs_dc_swg_w0p5=fit_material_vs_mode_w0p5(neff_swg_v_w0p5);
-material_vs_dc_swg_w0p6=fit_material_vs_mode_w0p6(neff_swg_v_w0p6);
+fitted_material_vs_dc_swg_v_w0p5=fit_material_vs_mode_w0p5(neff_swg_v_w0p5);
+fitted_material_vs_dc_swg_v_w0p6=fit_material_vs_mode_w0p6(neff_swg_v_w0p6);
+%
+fitted_dc_swg_v_vs_material_w0p5=fit_dc_swg_v_vs_mode_w0p5(neff_swg_v_w0p5);
+fitted_dc_swg_v_vs_material_w0p6=fit_dc_swg_v_vs_mode_w0p6(neff_swg_v_w0p6);
+%
+fitted_dc_swg_h_vs_material_w0p5=fit_dc_swg_h_vs_mode_w0p5(B1,neff_swg_h_w0p5);
+fitted_dc_swg_h_vs_material_w0p6=fit_dc_swg_h_vs_mode_w0p6(B2,neff_swg_h_w0p6);
+fitted_dc_swg_h_vs_material_w0p7=fit_dc_swg_h_vs_mode_w0p7(B3,neff_swg_h_w0p7);
+%
+fitted_material_vs_dc_swg_h_w0p5=fit_material_vs_mode_w0p5(neff_swg_h_w0p5);
+fitted_material_vs_dc_swg_h_w0p6=fit_material_vs_mode_w0p6(neff_swg_h_w0p6);
+%
+
 %
 figure('name','mode_material_vs_dc_swg_v_w0p5_hybrid_sims_fitted');
-plot(dc_swg_v_w0p5,neff_swg_v_w0p5,'r',dc_swg_v_w0p5,material_vs_dc_swg_w0p5,'b');
+plot(dc_swg_v_w0p5,neff_swg_v_w0p5,'r',dc_swg_v_w0p5,fitted_material_vs_dc_swg_v_w0p5,'b');
 legend('Mode Index','Material Index');
 title('ModeIndex\_MaterialIndex\_dc\_swg\_v\_w0p5\_hybrid\_sims\_fitted');
 xlabel('swg duty cycle');
@@ -279,15 +367,8 @@ ylabel('Mode Index , Material Index');
 dims={'wg width=0.5 micron'};
 text(0.5,3, dims);
 % 
-% For a given width, for given values of dc_swg_v, we have neff obtained from 3d fdtd swg_v simulation
-%********** dc_swg ==> sims: neff ==> fitted 3d FDTD: fitted effMaterialIndex
-% which means for given dc_swg we can calculated the respective effMaterialIndex (for a fixed defined width)
-% neff_swg_v_w0p6 is the simulated data for dc_swg sweep
-% Hybrid mode: mix of simulation and curve fitting
-material_vs_dc_swg_w0p6=fit_material_vs_mode_w0p6(neff_swg_v_w0p6);
-%
 figure('name','mode_material_vs_dc_swg_v_w0p6_hybrid_sims_fitted');
-plot(dc_swg_v_w0p6,neff_swg_v_w0p6,'r',dc_swg_v_w0p6,material_vs_dc_swg_w0p6,'b');
+plot(dc_swg_v_w0p6,neff_swg_v_w0p6,'r',dc_swg_v_w0p6,fitted_material_vs_dc_swg_v_w0p6,'b');
 legend('Mode Index','Material Index');
 title('ModeIndex\_MaterialIndex\_dc\_swg\_v\_w0p6\_hybrid\_sims\_fitted');
 xlabel('swg duty cycle');
@@ -324,23 +405,23 @@ figure('name','fitted_mode_material_vs_dc_swg_v_w0p5');
 plot(dc_swg_v_w0p5,neff_fitted_w0p5_1,'r',dc_swg_v_w0p5,material_fitted_w0p5_1,'b')
 hold on
 %'sim neff','fitted effmaterial for sim neff'
-plot(dc_swg_v_w0p5,neff_swg_v_w0p5,'*r',dc_swg_v_w0p5,material_vs_dc_swg_w0p5,'*b')
+plot(dc_swg_v_w0p5,neff_swg_v_w0p5,'*r',dc_swg_v_w0p5,fitted_material_vs_dc_swg_v_w0p5,'*b')
 %legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_swg\_v)','sim neff (dc sweep sims)','effmaterial for sim neff (dc sweep sims)')
 
 
 % Input is effMaterial => Calculate the fitted neff => Calculate the fitted dc_swg_v
-neff_fitted_w0p5_2=fit_mode_vs_material_w0p5(material_vs_dc_swg_w0p5);
+neff_fitted_w0p5_2=fit_mode_vs_material_w0p5(fitted_material_vs_dc_swg_v_w0p5);
 dc_swg_v_w0p5_fitted_2=fit_dc_swg_v_vs_mode_w0p5(neff_fitted_w0p5_2);
-plot(dc_swg_v_w0p5_fitted_2,neff_fitted_w0p5_2,'^r',dc_swg_v_w0p5_fitted_2,material_vs_dc_swg_w0p5,'^b')
+plot(dc_swg_v_w0p5_fitted_2,neff_fitted_w0p5_2,'^r',dc_swg_v_w0p5_fitted_2,fitted_material_vs_dc_swg_v_w0p5,'^b')
 legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_swg\_v)','sim neff (dc sweep sims)','effmaterial for sim neff (dc sweep sims)','fitted neff (input:given effMaterial Index)','given effMaterial Index')
 
 
 % error_dc_swg=100*(abs(dc_swg_v_w0p5_fitted_2-dc_swg_v_w0p5)./dc_swg_v_w0p5)
 
 % figure('name','fitted_mode_material_vs_dc_swg_v_w0p5');
-% plot(dc_swg_v_w0p5_fitted_2,neff_fitted_2,'r',dc_swg_v_w0p5_fitted_2,material_vs_dc_swg_w0p5,'b')
+% plot(dc_swg_v_w0p5_fitted_2,neff_fitted_2,'r',dc_swg_v_w0p5_fitted_2,fitted_material_vs_dc_swg_v_w0p5,'b')
 % hold on
-% plot(dc_swg_v_w0p5_fitted_2,neff_swg_v_w0p5,'*r',dc_swg_v_w0p5,material_vs_dc_swg_w0p5,'*b')
+% plot(dc_swg_v_w0p5_fitted_2,neff_swg_v_w0p5,'*r',dc_swg_v_w0p5,fitted_material_vs_dc_swg_v_w0p5,'*b')
 % legend('fitted neff','material for fitted neff','sim neff','fitted material for sim neff')
 
 
@@ -354,14 +435,14 @@ figure('name','fitted_mode_material_vs_dc_swg_v_w0p6');
 plot(dc_swg_v_w0p6,neff_fitted_w0p6_1,'r',dc_swg_v_w0p6,material_fitted_w0p6_1,'b')
 hold on
 %'sim neff','fitted effmaterial for sim neff'
-plot(dc_swg_v_w0p6,neff_swg_v_w0p6,'*r',dc_swg_v_w0p6,material_vs_dc_swg_w0p6,'*b')
+plot(dc_swg_v_w0p6,neff_swg_v_w0p6,'*r',dc_swg_v_w0p6,fitted_material_vs_dc_swg_v_w0p6,'*b')
 %legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_swg\_v)','sim neff (dc sweep sims)','effmaterial for sim neff (dc sweep sims)')
 
 
 % Input is effMaterial => Calculate the fitted neff => Calculate the fitted dc_swg_v
-neff_fitted_w0p6_2=fit_mode_vs_material_w0p6(material_vs_dc_swg_w0p6);
+neff_fitted_w0p6_2=fit_mode_vs_material_w0p6(fitted_material_vs_dc_swg_v_w0p6);
 dc_swg_v_w0p6_fitted_2=fit_dc_swg_v_vs_mode_w0p6(neff_fitted_w0p6_2);
-plot(dc_swg_v_w0p6_fitted_2,neff_fitted_w0p6_2,'^r',dc_swg_v_w0p6_fitted_2,material_vs_dc_swg_w0p6,'^b')
+plot(dc_swg_v_w0p6_fitted_2,neff_fitted_w0p6_2,'^r',dc_swg_v_w0p6_fitted_2,fitted_material_vs_dc_swg_v_w0p6,'^b')
 % legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_swg\_v)','sim neff (dc sweep sims)','effmaterial for sim neff (dc sweep sims)','fitted neff (input:given effMaterial Index)','given effMaterial Index')
 
 
@@ -414,7 +495,7 @@ legend('fitted neff (input:dc\_swg\_v)','effMaterial for fitted neff (input:dc\_
 %
 %
 figure('name','extra');
-plot(material_vs_dc_swg_w0p6,neff_fitted_w0p6_2)
+plot(fitted_material_vs_dc_swg_v_w0p6,neff_fitted_w0p6_2)
 hold on
 plot(extra_material_vs_neff(1),extra_fitted_neff_vs_material(1,1),'-x','MarkerEdgeColor','black','MarkerSize',10,'LineWidth',2)
 plot(extra_mat_neff(1,1),extra_mat_neff(1,2),'-p','MarkerEdgeColor','red','MarkerSize',10,'LineWidth',2)
@@ -479,7 +560,7 @@ id1=3;
 sim_material_test_value=f_w0p5(:,1);
 sim_neff_test_value=f_w0p5(:,2);
 fitted_neff_test_value=fit_mode_vs_material_w0p5(sim_material_test_value);
-fitted_dc_swg_h_test_value=fit_dc_swg_h_vs_mode_w0p5(B,sim_neff_test_value);
+fitted_dc_swg_h_test_value=fit_dc_swg_h_vs_mode_w0p5(B1,sim_neff_test_value);
 plot(fitted_dc_swg_h_test_value,sim_neff_test_value,'o','MarkerEdgeColor','black','MarkerSize',10)
 plot(fitted_dc_swg_h_test_value,fitted_neff_test_value,'p','MarkerEdgeColor','green','MarkerSize',10)
 legend('sim\_neff\_vs\_dc\_swg\_h', 'fitted\_neff\_vs\_dc\_swg\_h','material\_neff(sim)\_dc\_swg\_h(fitted)','material\_neff(fitted)\_dc\_swg\_h(fitted)')
